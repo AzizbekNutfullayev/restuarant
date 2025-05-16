@@ -1,16 +1,18 @@
-// backend/server.js
-const express = require('express');
-const cors = require('cors');
-const authRoutes = require('./routes/authRoutes');
+const express = require("express");
+const cors = require("cors");
+const authRoutes = require("./routes/authRoutes");
 
 const app = express();
 
-app.use(cors());
-app.use(express.json());
-app.use('/uploads', express.static('uploads'));
+app.use(cors({
+  origin: "http://localhost:5173",
+  methods: ["GET", "POST", "PATCH", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
 
-app.use('/auth', authRoutes);
+app.use(express.json());
+app.use("/auth", authRoutes);
 
 app.listen(1111, () => {
-  console.log('Amringizga mumtazirman');
+  console.log("Server is running on port 1111");
 });

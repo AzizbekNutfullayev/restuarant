@@ -1,22 +1,35 @@
-import { useAuth } from '../context/AuthContext';
-import { Link } from 'react-router-dom';
+import { useAuth } from "../context/AuthContext";
+import { Link, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
-    
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
+
   return (
     <nav className="navbar">
-      <h2>To'yxonalar</h2>
-      <div>
-        {user ? (
-          <>
-            <span>{user.username}</span>
-            <button onClick={logout}>Logout</button>
-          </>
-        ) : (
+      <Link to="/">Bosh sahifa</Link>
+
+      {!user && (
+        <>
           <Link to="/login">Login</Link>
-        )}
-      </div>
+          <Link to="/register">Register</Link>
+        </>
+      )}
+
+      {user && (
+        <>
+          <span>{user.username} ({user.role})</span>
+          {user.role === "admin" && <Link to="/admin">Admin</Link>}
+          {user.role === "owner" && <Link to="/add-hall">Add Hall</Link>}
+          {user.role === "user" && <Link to="/my-bookings">Mening bronlarim</Link>}
+          <button onClick={handleLogout}>Logout</button>
+        </>
+      )}
     </nav>
   );
 };
