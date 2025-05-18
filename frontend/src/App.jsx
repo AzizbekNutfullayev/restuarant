@@ -13,6 +13,7 @@ import AllBookings from "./pages/AllBookings";
 import "./App.css";
 import Register from "./pages/Register";
 import AdminAddHall from "./pages/AdminHall";
+import EditHall from "./pages/EditHall";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
           <Route path="/add-hall" element={<AddHall />} />
           <Route path="/all-bookings" element={<AllBookings />} />
           <Route path="/admin/add-hall" element={<AdminAddHall />} />
+          <Route path="/edit-hall/:id" element={<EditHall />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

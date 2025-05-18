@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Navbar from "../components/Navbar";
+import { Link } from "react-router-dom";
 
 const OwnerDashboard = () => {
   const [halls, setHalls] = useState([]);
   const [user, setUser] = useState(null);
+
+
 
   useEffect(() => {
     const stored = localStorage.getItem("user");
@@ -25,6 +28,8 @@ const OwnerDashboard = () => {
     return <div className="login-container">Faqat ownerlar uchun sahifa</div>;
   }
 
+  
+
   return (
     <>
       <Navbar />
@@ -40,6 +45,7 @@ const OwnerDashboard = () => {
                 <p><strong>Rayon:</strong> {hall.rayon}</p>
                 <p><strong>Manzil:</strong> {hall.address}</p>
                 <p><strong>Status:</strong> {hall.status}</p>
+                <Link to={`/edit-hall/${hall.id}`}>Tahrirlash</Link>
               </div>
             ))}
           </div>
