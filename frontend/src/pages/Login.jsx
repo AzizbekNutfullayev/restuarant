@@ -1,10 +1,8 @@
 import { useState } from "react";
-import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import api from "../services/api";
+import axios from "axios";
 
 const Login = () => {
-  const { login } = useAuth();
   const navigate = useNavigate();
 
   const [username, setUsername] = useState("");
@@ -16,33 +14,33 @@ const Login = () => {
     setError("");
 
     try {
-      // Backendga login so‘rovi
-      const res = await api.post("/auth/login", { username, password });
+      const res = await axios.post("http://localhost:1111/auth/login", {
+        username,
+        password
+      });
 
-      // JWT tokenni olib, payloadni ajratish
       const token = res.data.token;
-      const payload = JSON.parse(atob(token.split(".")[1]));
+      const payload = JSON.parse(atob(token.split(".")[1])); // token ichidan user ma'lumot
 
-      // AuthContext uchun user
       const user = {
-        id: payload.userId,
+        userId: payload.userId,
         username: payload.username,
         role: payload.role,
-        token,
+        token
       };
 
-      // tokenni axios headerga qo‘shish
-      api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-      login(user); // contextga yozish
-      localStorage.setItem("token", token); // agar keyinchalik kerak bo‘lsa
+      // 🔐 Saqlab qo'yamiz
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
 
-      // ✅ ROLGA QARAB SAHIFAGA YUONALTIRISH
+      // ➡️ Ruxsatga qarab yo'naltiramiz
       if (user.role === "admin") navigate("/admin");
       else if (user.role === "owner") navigate("/owner");
-      else navigate("/"); // oddiy user
+      else navigate("/");
+
     } catch (err) {
-      console.error(err);
-      setError(err.response?.data?.message || "Login muvaffaqiyatsiz");
+      console.error("Login xatoligi:", err);
+      setError("Login muvaffaqiyatsiz");
     }
   };
 
@@ -50,7 +48,6 @@ const Login = () => {
     <div className="login-container">
       <h2>Login</h2>
       {error && <p style={{ color: "red" }}>{error}</p>}
-
       <form onSubmit={handleSubmit}>
         <label>Username</label>
         <input
@@ -59,7 +56,6 @@ const Login = () => {
           onChange={(e) => setUsername(e.target.value)}
           required
         />
-
         <label>Password</label>
         <input
           type="password"
@@ -67,7 +63,6 @@ const Login = () => {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-
         <button type="submit">Kirish</button>
       </form>
     </div>

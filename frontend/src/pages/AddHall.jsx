@@ -1,12 +1,19 @@
-import { useState } from "react";
-import { useAuth } from "../context/AuthContext";
+// ✅ AddHall.jsx - useAuthsiz versiyasi
+import { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import api from "../services/api";
 import { useNavigate } from "react-router-dom";
 
 const AddHall = () => {
-  const { user } = useAuth();
   const navigate = useNavigate();
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
 
   const [form, setForm] = useState({
     name: "",
@@ -29,20 +36,20 @@ const AddHall = () => {
 
     const payload = {
       ...form,
-      owner_id: user?.id
+      owner_id: user?.userId
     };
 
     try {
       const res = await api.post("/toyxonalar", payload);
       setMessage(res.data.message);
-      navigate("/owner"); // dashboardga yo‘naltirish
+      navigate("/owner");
     } catch (err) {
       setMessage(err.response?.data?.message || "Xatolik yuz berdi");
       console.error(err);
     }
   };
 
-  if (user?.role !== "owner") {
+  if (!user || user.role !== "owner") {
     return (
       <div className="login-container">
         <h2>Faqat owner foydalanuvchi to‘yxona qo‘sha oladi</h2>

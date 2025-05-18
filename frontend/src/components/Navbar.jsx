@@ -1,44 +1,44 @@
-import { useAuth } from "../context/AuthContext";
+// ✅ Navbar.jsx - user info + logout + AddHall (owner uchun)
 import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 const Navbar = () => {
-  const { user, logout } = useAuth();
+  const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const stored = localStorage.getItem("user");
+    if (stored) {
+      setUser(JSON.parse(stored));
+    }
+  }, []);
+
   const handleLogout = () => {
-    logout();
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    setUser(null);
     navigate("/login");
   };
 
   return (
     <nav className="navbar">
-      <Link to="/">Bosh sahifa</Link>
-
-      {!user && (
-        <>
-          <Link to="/login">Login</Link>
-          <Link to="/register">Register</Link>
-        </>
-      )}
-
-      {user?.role === "admin" && (
-  <Link to="/admin/add-hall">To‘yxona Qo‘shish</Link>
-)}
-
-
-      {user && (
-        <>
-          <span>
-            {user.username} ({user.role})
-          </span>
-          {user.role === "admin" && <Link to="/admin">Admin</Link>}
-          {user.role === "owner" && <Link to="/add-hall">Add Hall</Link>}
-          {user.role === "user" && (
-            <Link to="/my-bookings">Mening bronlarim</Link>
-          )}
-          <button onClick={handleLogout}>Logout</button>
-        </>
-      )}
+      <div className="nav-left">
+        <Link to="/">Bosh sahifa</Link>
+        {user?.role === "owner" && <Link to="/add-hall">To‘yxona qo‘shish</Link>}
+      </div>
+      <div className="nav-right">
+        {!user ? (
+          <>
+            <Link to="/login">Login</Link>
+            <Link to="/register">Register</Link>
+          </>
+        ) : (
+          <>
+            <span>{user.username} | <strong>{user.role}</strong></span>
+            <button onClick={handleLogout}>Chiqish</button>
+          </>
+        )}
+      </div>
     </nav>
   );
 };

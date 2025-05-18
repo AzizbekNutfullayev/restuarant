@@ -1,78 +1,48 @@
-import { useAuth } from "../context/AuthContext";
+import { useEffect, useState } from "react";
+import axios from "axios";
 import Navbar from "../components/Navbar";
-import { useState, useEffect } from "react";
-
-// Mock data
-const mockHalls = [
-  {
-    id: 1,
-    name: "Rayxon",
-    capacity: 300,
-    price: 150,
-    bookings: [
-      { date: "2024-06-10", guests: 100, user: "Ali" },
-      { date: "2024-06-22", guests: 80, user: "Vali" },
-    ],
-  },
-  {
-    id: 2,
-    name: "White Bird",
-    capacity: 500,
-    price: 250,
-    bookings: [],
-  },
-];
 
 const OwnerDashboard = () => {
-  const { user } = useAuth();
   const [halls, setHalls] = useState([]);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    // Hozircha mock orqali
-    if (user?.role === "owner") {
-      setHalls(mockHalls);
+    const stored = localStorage.getItem("user");
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      setUser(parsed);
+
+      if (parsed.role === "owner") {
+        axios
+          .get(`http://localhost:1111/toyxonalar/owner/${parsed.userId}`)
+          .then((res) => setHalls(res.data))
+          .catch((err) => console.error("Xatolik:", err));
+      }
     }
-  }, [user]);
+  }, []);
+
+  if (!user || user.role !== "owner") {
+    return <div className="login-container">Faqat ownerlar uchun sahifa</div>;
+  }
 
   return (
     <>
       <Navbar />
       <div className="home-page">
-        <h1>Mening to‘yxonalarim</h1>
+        <h2>Men qo‘shgan to‘yxonalar</h2>
         {halls.length === 0 ? (
-          <p>Sizda hali to‘yxona yo‘q</p>
+          <p>Siz hali hech qanday to‘yxona qo‘shmagansiz.</p>
         ) : (
-          halls.map((hall) => (
-            <div key={hall.id} className="hall-card" style={{ flexDirection: "column" }}>
-              <h3>{hall.name}</h3>
-              <p>Sig‘im: {hall.capacity}</p>
-              <p>Narx: {hall.price}$</p>
-
-              <h4>Bronlar:</h4>
-              {hall.bookings.length === 0 ? (
-                <p>Hali bron qilinmagan</p>
-              ) : (
-                <table className="table">
-                  <thead>
-                    <tr>
-                      <th>Sana</th>
-                      <th>Odamlar</th>
-                      <th>Kim tomonidan</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {hall.bookings.map((b, i) => (
-                      <tr key={i}>
-                        <td>{b.date}</td>
-                        <td>{b.guests}</td>
-                        <td>{b.user}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              )}
-            </div>
-          ))
+          <div className="hall-list">
+            {halls.map((hall) => (
+              <div className="hall-card" key={hall.id}>
+                <h3>{hall.name}</h3>
+                <p><strong>Rayon:</strong> {hall.rayon}</p>
+                <p><strong>Manzil:</strong> {hall.address}</p>
+                <p><strong>Status:</strong> {hall.status}</p>
+              </div>
+            ))}
+          </div>
         )}
       </div>
     </>
