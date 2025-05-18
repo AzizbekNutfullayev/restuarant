@@ -1,7 +1,8 @@
 const express = require("express");
 const cors = require("cors");
 const authRoutes = require("./routes/authRoutes");
-const { toyxonalr } = require("./controllers/restuarant/toyxonani_qoshish");
+const toyxonaRoutes = require("./routes/toyxonaRoutes");
+const adminRoutes = require("./routes/adminRoutes");
 
 const app = express();
 
@@ -16,7 +17,9 @@ app.use(express.json());
 app.use("/auth", authRoutes);
 
 // resturant 
-app.use("/toyxonalar", toyxonalr); 
+app.use("/toyxonalar", toyxonaRoutes); 
+//admin
+app.use('/admin',adminRoutes)
 
 app.listen(1111, () => {
   console.log("Server is running on port 1111");
