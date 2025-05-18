@@ -9,7 +9,7 @@ const Register = () => {
     lastname: "",
     username: "",
     password: "",
-    role: ""
+    role: "owner" 
   });
 
   const handleChange = (e) => {
@@ -30,20 +30,12 @@ const Register = () => {
 
   return (
     <div className="login-container">
-      <h2>Register</h2>
+      <h2>Owner Ro‘yxatdan O‘tish</h2>
       <form onSubmit={handleSubmit}>
         <input name="firstname" onChange={handleChange} placeholder="Ism" required />
         <input name="lastname" onChange={handleChange} placeholder="Familiya" required />
         <input name="username" onChange={handleChange} placeholder="Username" required />
         <input name="password" type="password" onChange={handleChange} placeholder="Parol" required />
-
-        <select name="role" value={form.role} onChange={handleChange} required>
-          <option value="">Roli</option>
-          <option value="user">User</option>
-          <option value="owner">Owner</option>
-          <option value="admin">Admin</option>
-        </select>
-
         <button type="submit">Yuborish</button>
       </form>
     </div>
