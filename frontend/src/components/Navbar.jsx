@@ -21,12 +21,21 @@ const Navbar = () => {
         </>
       )}
 
+      {user?.role === "admin" && (
+  <Link to="/admin/add-hall">To‘yxona Qo‘shish</Link>
+)}
+
+
       {user && (
         <>
-          <span>{user.username} ({user.role})</span>
+          <span>
+            {user.username} ({user.role})
+          </span>
           {user.role === "admin" && <Link to="/admin">Admin</Link>}
           {user.role === "owner" && <Link to="/add-hall">Add Hall</Link>}
-          {user.role === "user" && <Link to="/my-bookings">Mening bronlarim</Link>}
+          {user.role === "user" && (
+            <Link to="/my-bookings">Mening bronlarim</Link>
+          )}
           <button onClick={handleLogout}>Logout</button>
         </>
       )}

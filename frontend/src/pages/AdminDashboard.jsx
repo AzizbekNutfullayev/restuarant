@@ -1,65 +1,77 @@
+import { useEffect, useState } from "react";
+import axios from "axios";
 import Navbar from "../components/Navbar";
-import { useState, useEffect } from "react";
-
-// Mock data
-const mockHalls = [
-  { id: 1, name: "Rayxon", capacity: 300, price: 150, status: "tasdiqlanmagan" },
-  { id: 2, name: "White Bird", capacity: 500, price: 250, status: "tasdiqlangan" },
-];
 
 const AdminDashboard = () => {
   const [halls, setHalls] = useState([]);
+  const [error, setError] = useState("");
+
+  const fetchHalls = () => {
+    axios.get("http://localhost:1111/admin/toyxonalar")
+      .then(res => setHalls(res.data.data || []))
+      .catch(err => {
+        console.error("Xatolik:", err);
+        setError("To‘yxonalarni olishda xatolik");
+      });
+  };
 
   useEffect(() => {
-    setHalls(mockHalls); // backenddan keladigan joy
+    fetchHalls();
   }, []);
 
   const handleApprove = (id) => {
-    setHalls((prev) =>
-      prev.map((h) => (h.id === id ? { ...h, status: "tasdiqlangan" } : h))
-    );
+    axios.patch(`http://localhost:1111/admin/toyxonalar/${id}/approve`)
+      .then(() => fetchHalls())
+      .catch(err => {
+        console.error("Tasdiqlash xatoligi:", err);
+        alert("Tasdiqlashda xatolik");
+      });
   };
 
   const handleDelete = (id) => {
-    setHalls((prev) => prev.filter((h) => h.id !== id));
+    if (window.confirm("Bu to‘yxonani o‘chirishga ishonchingiz komilmi?")) {
+      axios.delete(`http://localhost:1111/admin/toyxonalar/${id}`)
+        .then(() => fetchHalls())
+        .catch(err => {
+          console.error("O‘chirish xatoligi:", err);
+          alert("O‘chirishda xatolik");
+        });
+    }
   };
 
   return (
     <>
       <Navbar />
       <div className="home-page">
-        <h1>Admin Panel</h1>
-        <table className="table">
-          <thead>
-            <tr>
-              <th>Nomi</th>
-              <th>Sig‘im</th>
-              <th>Narx</th>
-              <th>Status</th>
-              <th>Amallar</th>
-            </tr>
-          </thead>
-          <tbody>
+        <h2>Admin Panel — Barcha To‘yxonalar</h2>
+        {error && <p style={{ color: "red" }}>{error}</p>}
+        {halls.length === 0 ? (
+          <p>Hozircha to‘yxona mavjud emas</p>
+        ) : (
+          <div className="hall-list">
             {halls.map((hall) => (
-              <tr key={hall.id}>
-                <td>{hall.name}</td>
-                <td>{hall.capacity}</td>
-                <td>{hall.price}$</td>
-                <td>{hall.status}</td>
-                <td>
-                  {hall.status === "tasdiqlanmagan" ? (
-                    <button onClick={() => handleApprove(hall.id)}>Tasdiqlash</button>
-                  ) : (
-                    <span>✔</span>
-                  )}
-                  <button onClick={() => handleDelete(hall.id)} style={{ marginLeft: 10, backgroundColor: "red", color: "white" }}>
-                    O‘chirish
-                  </button>
-                </td>
-              </tr>
+              <div className="hall-card" key={hall.id}>
+                <h3>{hall.name}</h3>
+                <p><strong>Rayon:</strong> {hall.rayon}</p>
+                <p><strong>Manzil:</strong> {hall.address}</p>
+                <p><strong>Narx:</strong> ${hall.seat_price}</p>
+                <p><strong>Sig‘im:</strong> {hall.seat_count}</p>
+                <p><strong>Status:</strong> {hall.status}</p>
+                <p><strong>Egasining ismi:</strong> {hall.owner_firstname} {hall.owner_lastname}</p>
+
+                {hall.status === "tasdiqlanmagan" && (
+                  <button onClick={() => handleApprove(hall.id)}>Tasdiqlash</button>
+                )}
+                <button
+                  onClick={() => handleDelete(hall.id)}
+                  style={{ backgroundColor: "red", color: "white" }}
+                >
+                  O‘chirish
+                </button>
+              </div>
             ))}
-          </tbody>
-        </table>
+          </div>
+        )}
       </div>
     </>
   );

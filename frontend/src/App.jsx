@@ -12,6 +12,7 @@ import UserProfile from "./pages/UserProfile";
 import AllBookings from "./pages/AllBookings";
 import "./App.css";
 import Register from "./pages/Register";
+import AdminAddHall from "./pages/AdminHall";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           <Route path="/profile" element={<UserProfile />} />
           <Route path="/add-hall" element={<AddHall />} />
           <Route path="/all-bookings" element={<AllBookings />} />
+          <Route path="/admin/add-hall" element={<AdminAddHall />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

@@ -1,51 +1,51 @@
+// ✅ Home.jsx - Barcha tasdiqlangan to'yxonalarni ko'rsatadi (bron faqat user uchun)
 import { useEffect, useState } from "react";
+import axios from "axios";
 import Navbar from "../components/Navbar";
-import { useAuth } from "../context/AuthContext";
-import api from "../services/api";
-import { Link } from "react-router-dom";
 
 const Home = () => {
-  const { user } = useAuth();
   const [halls, setHalls] = useState([]);
-  const [error, setError] = useState("");
+  const [user, setUser] = useState(null); // LocalStorage'dan user ma'lumotini olish
 
   useEffect(() => {
-    api.get("/toyxonalar")
+    // Foydalanuvchini localStorage'dan olish (agar mavjud bo‘lsa)
+    const storedToken = localStorage.getItem("token");
+    const storedUser = localStorage.getItem("admin") || localStorage.getItem("user");
+    if (storedToken && storedUser) {
+      const parsedUser = JSON.parse(storedUser);
+      setUser(parsedUser);
+    }
+
+    // Tasdiqlangan to'yxonalarni olish
+    axios.get("http://localhost:1111/toyxonalar")
       .then((res) => setHalls(res.data))
-      .catch((err) => {
-        console.error("To‘yxonalarni olishda xatolik:", err);
-        setError("Ma'lumotlarni olishda xatolik yuz berdi");
-      });
+      .catch((err) => console.error("Xatolik:", err));
   }, []);
+
+  const handleBron = (id) => {
+    alert(`Bron qilish sahifasiga yo'naltiriladi (Hall ID: ${id})`);
+    // navigate(`/hall/${id}`) yoki /bronlashga yo'naltirish
+  };
 
   return (
     <>
       <Navbar />
       <div className="home-page">
-        <h1>Tasdiqlangan To‘yxonalar</h1>
-
-        {error && <p style={{ color: "red" }}>{error}</p>}
-
+        <h2>Barcha To‘yxonalar</h2>
         <div className="hall-list">
           {halls.map((hall) => (
             <div className="hall-card" key={hall.id}>
-              <img
-                src={
-                  hall.image ||
-                  "https://via.placeholder.com/100x80?text=Image"
-                }
-                alt={hall.name}
-              />
-              <div>
-                <h3>{hall.name}</h3>
-                <p>Rayon: {hall.rayon}</p>
-                <p>Manzil: {hall.address}</p>
-                <p>Narx: ${hall.seat_price}</p>
-                <p>Sig‘im: {hall.seat_count} kishi</p>
-              </div>
-              <Link to={`/hall/${hall.id}`}>
-                <button>{user ? "Ko‘rish" : "Login kerak"}</button>
-              </Link>
+              <h3>{hall.name}</h3>
+              <p><strong>Rayon:</strong> {hall.rayon}</p>
+              <p><strong>Manzil:</strong> {hall.address}</p>
+              <p><strong>Narx:</strong> ${hall.seat_price}</p>
+              <p><strong>Sig‘im:</strong> {hall.seat_count}</p>
+              <p><strong>Telefon:</strong> {hall.phone}</p>
+              {user?.role === "user" && (
+                <button onClick={() => handleBron(hall.id)}>
+                  Bron qilish
+                </button>
+              )}
             </div>
           ))}
         </div>

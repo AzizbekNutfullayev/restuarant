@@ -21,3 +21,16 @@ exports.getAllToyxonalar = async (req, res) => {
     res.status(500).json({ message: "Server xatoligi" });
   }
 };
+
+
+exports.getToyxonalar = async (req, res) => {
+  try {
+    const result = await pool.query(
+      "SELECT * FROM toyxonalar WHERE status = 'tasdiqlangan' ORDER BY id DESC"
+    );
+    res.status(200).json(result.rows);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ message: "Bazadan xatolik" });
+  }
+};
