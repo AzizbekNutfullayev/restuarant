@@ -1,4 +1,3 @@
-const pool = require("../config/db");
 
 exports.getToyxonalar = async (req, res) => {
   try {
@@ -18,7 +17,7 @@ exports.addToyxona = async (req, res) => {
     const { name, rayon, address, seat_count, seat_price, phone, owner_id } = req.body;
 
     if (!name || !rayon || !address || !seat_count || !seat_price || !phone || !owner_id) {
-      return res.status(400).json({ message: "Barcha maydonlar to‘ldirilishi kerak" });
+      return res.status(400).json({ message: "Barcha maydonlar toldirilishi kerak" });
     }
 
     const result = await pool.query(
@@ -28,9 +27,9 @@ exports.addToyxona = async (req, res) => {
       [name, rayon, address, seat_count, seat_price, phone, owner_id]
     );
 
-    res.status(201).json({ message: "To‘yxona qo‘shildi", data: result.rows[0] });
+    res.status(201).json({ message: "Toyxona qoshildi", data: result.rows[0] });
   } catch (err) {
-    console.error("To‘yxona qo‘shishda xatolik:", err.message);
+    console.error("Toyxona qoshishda xatolik:", err.message);
     res.status(500).json({ message: "Server xatoligi" });
   }
 };

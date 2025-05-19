@@ -1,4 +1,3 @@
-// ✅ AdminAddHall.jsx - useAuthsiz versiyasi (localStorage bilan)
 import { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import api from "../services/api";
@@ -41,7 +40,7 @@ const AdminAddHall = () => {
 
     try {
       const res = await api.post("/admin/add-hall", payload);
-      setMessage(res.data.message || "Qo‘shildi!");
+      setMessage(res.data.message || "Qoshildi!");
       navigate("/admin"); 
     } catch (err) {
       setMessage(err.response?.data?.message || "Xatolik yuz berdi");

@@ -24,11 +24,9 @@ const Navbar = () => {
       <div className="nav-left">
         <Link to="/">Bosh sahifa</Link>
 
-        {/* 🔵 Owner uchun */}
-        {user?.role === "owner" && <Link to="/add-hall">To‘yxona qo‘shish</Link>}
+        {user?.role === "owner" && <Link to="/add-hall">Toyxona qshish</Link>}
 
-        {/* 🔵 Admin uchun */}
-        {user?.role === "admin" && <Link to="/admin/add-hall">To‘yxona qo‘shish</Link>}
+        {user?.role === "admin" && <Link to="/admin/add-hall">Toyxona qoshish</Link>}
       </div>
 
       <div className="nav-right">

@@ -14,7 +14,7 @@ exports.addToyxonaAdmin = async (req, res) => {
       !phone ||
       !owner_id
     ) {
-      return res.status(400).json({ message: "Hamma maydonlarni to‘ldiring" });
+      return res.status(400).json({ message: "Hamma maydonlarni toldiring" });
     }
 
     const result = await pool.query(
@@ -25,7 +25,7 @@ exports.addToyxonaAdmin = async (req, res) => {
     );
 
     res.status(201).json({
-      message: "Admin tomonidan to‘yxona qo‘shildi",
+      message: "Admin tomonidan toyxona qoshildi",
       data: result.rows[0],
     });
   } catch (error) {

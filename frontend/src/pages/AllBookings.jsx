@@ -1,34 +1,6 @@
 import { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 
-
-const mockBookings = [
-  {
-    id: 101,
-    hall: "Rayxon",
-    user: { name: "Ali", phone: "+99890..." },
-    date: "2024-06-15",
-    guests: 150,
-    status: "endi boladigan"
-  },
-  {
-    id: 102,
-    hall: "White Bird",
-    user: { name: "Aziz", phone: "+99891..." },
-    date: "2024-04-20",
-    guests: 120,
-    status: "bolib otgan"
-  },
-  {
-    id: 103,
-    hall: "Surpose",
-    user: { name: "Vali", phone: "+99899..." },
-    date: "2024-07-10",
-    guests: 200,
-    status: "endi boladigan"
-  },
-];
-
 const AllBookings = () => {
   const [bookings, setBookings] = useState([]);
 
@@ -42,13 +14,13 @@ const AllBookings = () => {
       <div className="home-page">
         <h1>Barcha Bronlar (Admin)</h1>
         {bookings.length === 0 ? (
-          <p>Hech qanday bron yo‘q</p>
+          <p>Hech qanday bron yoq</p>
         ) : (
           <table className="table">
             <thead>
               <tr>
                 <th>ID</th>
-                <th>To‘yxona</th>
+                <th>Toyxona</th>
                 <th>Sana</th>
                 <th>Odamlar</th>
                 <th>Foydalanuvchi</th>

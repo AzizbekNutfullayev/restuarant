@@ -34,7 +34,7 @@ const AddHall = () => {
     setMessage("");
 
     const payload = {
-      ...form,
+  ...form,
       owner_id: user?.userId
     };
 
@@ -51,7 +51,7 @@ const AddHall = () => {
   if (!user || user.role !== "owner") {
     return (
       <div className="login-container">
-        <h2>Faqat owner foydalanuvchi to‘yxona qo‘sha oladi</h2>
+        <h2>Faqat owner foydalanuvchi toyxona qosha oladi</h2>
       </div>
     );
   }
@@ -60,7 +60,7 @@ const AddHall = () => {
     <>
       <Navbar />
       <div className="login-container" style={{ maxWidth: "600px" }}>
-        <h2>Yangi To‘yxona Qo‘shish</h2>
+        <h2>Yangi Toyxona Qoshish</h2>
         {message && <p style={{ color: "green" }}>{message}</p>}
         <form onSubmit={handleSubmit}>
           <label>Nomi</label>
@@ -75,13 +75,13 @@ const AddHall = () => {
           <label>Narxi ($)</label>
           <input name="seat_price" type="number" onChange={handleChange} required />
 
-          <label>Sig‘imi (kishilar soni)</label>
+          <label>Sigimi (kishilar soni)</label>
           <input name="seat_count" type="number" onChange={handleChange} required />
 
           <label>Telefon</label>
           <input name="phone" onChange={handleChange} required />
 
-          <button type="submit">Qo‘shish</button>
+          <button type="submit">Qoshish</button>
         </form>
       </div>
     </>

@@ -11,7 +11,7 @@ exports.updateToyxona = async (req, res) => {
        WHERE id = $7`,
       [name, rayon, address, seat_count, seat_price, phone, id]
     );
-    res.json({ message: "To‘yxona yangilandi" });
+    res.json({ message: "Toyxona yangilandi" });
   } catch (err) {
     console.error("Tahrirlashda xatolik:", err.message);
     res.status(500).json({ message: "Server xatoligi" });

@@ -15,12 +15,10 @@ const Home = () => {
       setUser(parsedUser);
     }
 
-    // Tasdiqlangan to'yxonalarni olish
   axios.get("http://localhost:1111/toyxonalar")
   .then((res) => setHalls(res.data.data || []))
   .catch((err) => console.error("Xatolik:", err));
   }, []);
-
   const handleBron = (id) => {
     alert(`Bron qilish sahifasiga yo'naltiriladi (Hall ID: ${id})`);
   };
@@ -29,10 +27,10 @@ const Home = () => {
     <>
       <Navbar />
       <div className="home-page">
-        <h2>Barcha To‘yxonalar</h2>
+        <h2>Barcha Toyxonalar</h2>
         <div className="hall-list">
           {halls.length === 0 ? (
-            <p>Hozircha tasdiqlangan to‘yxona mavjud emas</p>
+            <p>Hozircha tasdiqlangan toyxona mavjud emas</p>
           ) : (
             halls.map((hall) => (
               <div className="hall-card" key={hall.id}>
@@ -40,7 +38,7 @@ const Home = () => {
                 <p><strong>Rayon:</strong> {hall.rayon}</p>
                 <p><strong>Manzil:</strong> {hall.address}</p>
                 <p><strong>Narx:</strong> ${hall.seat_price}</p>
-                <p><strong>Sig‘im:</strong> {hall.seat_count}</p>
+                <p><strong>Sigim:</strong> {hall.seat_count}</p>
                 <p><strong>Telefon:</strong> {hall.phone}</p>
                 {user?.role === "user" && (
                   <button onClick={() => handleBron(hall.id)}>

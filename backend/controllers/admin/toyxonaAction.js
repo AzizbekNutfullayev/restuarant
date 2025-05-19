@@ -10,7 +10,7 @@ exports.approveToyxona = async (req, res) => {
     );
 
     if (result.rows.length === 0) {
-      return res.status(404).json({ message: "To‘yxona topilmadi" });
+      return res.status(404).json({ message: "Toyxona topilmadi" });
     }
 
     res.status(200).json({ message: "Tasdiqlandi", hall: result.rows[0] });
@@ -26,9 +26,9 @@ exports.deleteToyxona = async (req, res) => {
   try {
     const result = await pool.query("DELETE FROM toyxonalar WHERE id = $1", [id]);
 
-    res.status(200).json({ message: "O‘chirildi" });
+    res.status(200).json({ message: "Ochirildi" });
   } catch (err) {
-    console.error("O‘chirishda xatolik:", err.message);
-    res.status(500).json({ message: "O‘chirishda server xatoligi" });
+    console.error("Ochirishda xatolik:", err.message);
+    res.status(500).json({ message: "Ochirishda server xatoligi" });
   }
 };
