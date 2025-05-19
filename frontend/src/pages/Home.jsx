@@ -15,7 +15,7 @@ const Home = () => {
       setUser(parsedUser);
     }
 
-  axios.get("http://localhost:1111/toyxonalar")
+  axios.get("http://localhost:1111/user/")
   .then((res) => setHalls(res.data.data || []))
   .catch((err) => console.error("Xatolik:", err));
   }, []);
