@@ -24,7 +24,7 @@ exports.getToyxonalar = async (req, res) => {
     const result = await pool.query(
       "SELECT * FROM toyxonalar WHERE status = 'tasdiqlangan'"
     );
-    res.status(200).json({ data: result.rows }); // ✅ faqat shunday bo‘lishi kerak
+    res.status(200).json({ data: result.rows });
   } catch (err) {
     console.error("Xatolik:", err.message);
     res.status(500).json({ message: "Server xatoligi" });
