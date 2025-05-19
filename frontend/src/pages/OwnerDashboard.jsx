@@ -34,9 +34,9 @@ const OwnerDashboard = () => {
     <>
       <Navbar />
       <div className="home-page">
-        <h2>Men qo‘shgan to‘yxonalar</h2>
+        <h2>Men qoshgan toyxonalar</h2>
         {halls.length === 0 ? (
-          <p>Siz hali hech qanday to‘yxona qo‘shmagansiz.</p>
+          <p>Siz hali hech qanday toyxona qoshmagansiz.</p>
         ) : (
           <div className="hall-list">
             {halls.map((hall) => (

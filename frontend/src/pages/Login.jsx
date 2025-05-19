@@ -20,7 +20,7 @@ const Login = () => {
       });
 
       const token = res.data.token;
-      const payload = JSON.parse(atob(token.split(".")[1])); // token ichidan user ma'lumot
+      const payload = JSON.parse(atob(token.split(".")[1])); 
 
       const user = {
         userId: payload.userId,
@@ -29,11 +29,9 @@ const Login = () => {
         token
       };
 
-      // 🔐 Saqlab qo'yamiz
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
 
-      // ➡️ Ruxsatga qarab yo'naltiramiz
       if (user.role === "admin") navigate("/admin");
       else if (user.role === "owner") navigate("/owner");
       else navigate("/");

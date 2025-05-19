@@ -11,7 +11,7 @@ const { updateToyxona } = require("../controllers/restuarant/tahrirlashToyxona")
 router.post("/", addToyxona); 
 router.patch("/:id", updateToyxona);
 
-router.get("/", getToyxonalar);
+router.get("/",  getToyxonalar);
 router.post('/toyxona',toyxonalr)
 router.get('/owner/:id', viewToyxona);
 

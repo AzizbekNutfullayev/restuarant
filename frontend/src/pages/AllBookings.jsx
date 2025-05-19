@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 
-// Mock bronlar
+
 const mockBookings = [
   {
     id: 101,
@@ -9,7 +9,7 @@ const mockBookings = [
     user: { name: "Ali", phone: "+99890..." },
     date: "2024-06-15",
     guests: 150,
-    status: "endi bo‘ladigan"
+    status: "endi boladigan"
   },
   {
     id: 102,
@@ -17,7 +17,7 @@ const mockBookings = [
     user: { name: "Aziz", phone: "+99891..." },
     date: "2024-04-20",
     guests: 120,
-    status: "bo‘lib o‘tgan"
+    status: "bolib otgan"
   },
   {
     id: 103,
@@ -25,7 +25,7 @@ const mockBookings = [
     user: { name: "Vali", phone: "+99899..." },
     date: "2024-07-10",
     guests: 200,
-    status: "endi bo‘ladigan"
+    status: "endi boladigan"
   },
 ];
 
@@ -33,7 +33,7 @@ const AllBookings = () => {
   const [bookings, setBookings] = useState([]);
 
   useEffect(() => {
-    setBookings(mockBookings); // keyinchalik: axios.get("/bookings")
+    setBookings(mockBookings); 
   }, []);
 
   return (
