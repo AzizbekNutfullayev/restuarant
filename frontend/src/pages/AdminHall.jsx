@@ -1,12 +1,19 @@
-import { useState } from "react";
-import { useAuth } from "../context/AuthContext";
+// ✅ AdminAddHall.jsx - useAuthsiz versiyasi (localStorage bilan)
+import { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import api from "../services/api";
 import { useNavigate } from "react-router-dom";
 
 const AdminAddHall = () => {
-  const { user } = useAuth();
   const navigate = useNavigate();
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
 
   const [form, setForm] = useState({
     name: "",
@@ -29,21 +36,20 @@ const AdminAddHall = () => {
 
     const payload = {
       ...form,
-      owner_id: user?.id,
+      owner_id: user?.userId,
     };
 
     try {
       const res = await api.post("/admin/add-hall", payload);
-
       setMessage(res.data.message || "Qo‘shildi!");
-      navigate("/admin"); // ✅ Admin dashboard sahifaga yo‘naltirish
+      navigate("/admin"); 
     } catch (err) {
       setMessage(err.response?.data?.message || "Xatolik yuz berdi");
       console.error(err);
     }
   };
 
-  if (user?.role !== "admin") {
+  if (!user || user.role !== "admin") {
     return (
       <div className="login-container">
         <h2>Faqat admin foydalanuvchi bu sahifaga kira oladi</h2>

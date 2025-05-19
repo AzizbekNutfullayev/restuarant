@@ -2,9 +2,18 @@ const pool = require("../../config/db");
 
 exports.addToyxonaAdmin = async (req, res) => {
   try {
-    const { name, rayon, address, seat_count, seat_price, phone, owner_id } = req.body;
+    const { name, rayon, address, seat_count, seat_price, phone, owner_id } =
+      req.body;
 
-    if (!name || !rayon || !address || !seat_count || !seat_price || !phone || !owner_id) {
+    if (
+      !name ||
+      !rayon ||
+      !address ||
+      !seat_count ||
+      !seat_price ||
+      !phone ||
+      !owner_id
+    ) {
       return res.status(400).json({ message: "Hamma maydonlarni to‘ldiring" });
     }
 
@@ -17,7 +26,7 @@ exports.addToyxonaAdmin = async (req, res) => {
 
     res.status(201).json({
       message: "Admin tomonidan to‘yxona qo‘shildi",
-      data: result.rows[0]
+      data: result.rows[0],
     });
   } catch (error) {
     console.error(error.message);

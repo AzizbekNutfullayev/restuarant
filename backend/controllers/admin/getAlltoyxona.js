@@ -1,7 +1,4 @@
-
-
 const pool = require("../../config/db");
-
 
 exports.getAllToyxonalar = async (req, res) => {
   try {
@@ -14,7 +11,7 @@ exports.getAllToyxonalar = async (req, res) => {
 
     res.status(200).json({
       message: "hamma toyxonalar ",
-      data: result.rows
+      data: result.rows,
     });
   } catch (error) {
     console.error(error.message);
@@ -22,15 +19,15 @@ exports.getAllToyxonalar = async (req, res) => {
   }
 };
 
-
 exports.getToyxonalar = async (req, res) => {
   try {
     const result = await pool.query(
-      "SELECT * FROM toyxonalar WHERE status = 'tasdiqlangan' ORDER BY id DESC"
+      "SELECT * FROM toyxonalar WHERE status = 'tasdiqlangan'"
     );
-    res.status(200).json(result.rows);
+    res.status(200).json({ data: result.rows }); // ✅ faqat shunday bo‘lishi kerak
   } catch (err) {
-    console.error(err.message);
-    res.status(500).json({ message: "Bazadan xatolik" });
+    console.error("Xatolik:", err.message);
+    res.status(500).json({ message: "Server xatoligi" });
   }
 };
+

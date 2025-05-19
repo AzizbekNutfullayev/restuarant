@@ -3,11 +3,11 @@ const pool = require("../config/db");
 exports.getToyxonalar = async (req, res) => {
   try {
     const result = await pool.query(
-      "SELECT * FROM toyxonalar WHERE status = 'tasdiqlanmagan'"
+      "SELECT * FROM toyxonalar WHERE status = 'tasdiqlangan'"
     );
-    res.status(200).json(result.rows);
+    res.status(200).json({ data: result.rows }); // ✅ faqat shunday bo‘lishi kerak
   } catch (err) {
-    console.error("DB xatoligi:", err.message);
+    console.error("Xatolik:", err.message);
     res.status(500).json({ message: "Server xatoligi" });
   }
 };

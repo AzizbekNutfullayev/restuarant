@@ -10,16 +10,17 @@ const Home = () => {
   useEffect(() => {
     // Foydalanuvchini localStorage'dan olish (agar mavjud bo‘lsa)
     const storedToken = localStorage.getItem("token");
-    const storedUser = localStorage.getItem("admin") || localStorage.getItem("user");
+    const storedUser = localStorage.getItem("user");
+
     if (storedToken && storedUser) {
       const parsedUser = JSON.parse(storedUser);
       setUser(parsedUser);
     }
 
     // Tasdiqlangan to'yxonalarni olish
-    axios.get("http://localhost:1111/toyxonalar")
-      .then((res) => setHalls(res.data))
-      .catch((err) => console.error("Xatolik:", err));
+  axios.get("http://localhost:1111/toyxonalar")
+  .then((res) => setHalls(res.data.data || []))
+  .catch((err) => console.error("Xatolik:", err));
   }, []);
 
   const handleBron = (id) => {
@@ -33,21 +34,25 @@ const Home = () => {
       <div className="home-page">
         <h2>Barcha To‘yxonalar</h2>
         <div className="hall-list">
-          {halls.map((hall) => (
-            <div className="hall-card" key={hall.id}>
-              <h3>{hall.name}</h3>
-              <p><strong>Rayon:</strong> {hall.rayon}</p>
-              <p><strong>Manzil:</strong> {hall.address}</p>
-              <p><strong>Narx:</strong> ${hall.seat_price}</p>
-              <p><strong>Sig‘im:</strong> {hall.seat_count}</p>
-              <p><strong>Telefon:</strong> {hall.phone}</p>
-              {user?.role === "user" && (
-                <button onClick={() => handleBron(hall.id)}>
-                  Bron qilish
-                </button>
-              )}
-            </div>
-          ))}
+          {halls.length === 0 ? (
+            <p>Hozircha tasdiqlangan to‘yxona mavjud emas</p>
+          ) : (
+            halls.map((hall) => (
+              <div className="hall-card" key={hall.id}>
+                <h3>{hall.name}</h3>
+                <p><strong>Rayon:</strong> {hall.rayon}</p>
+                <p><strong>Manzil:</strong> {hall.address}</p>
+                <p><strong>Narx:</strong> ${hall.seat_price}</p>
+                <p><strong>Sig‘im:</strong> {hall.seat_count}</p>
+                <p><strong>Telefon:</strong> {hall.phone}</p>
+                {user?.role === "user" && (
+                  <button onClick={() => handleBron(hall.id)}>
+                    Bron qilish
+                  </button>
+                )}
+              </div>
+            ))
+          )}
         </div>
       </div>
     </>
@@ -55,3 +60,4 @@ const Home = () => {
 };
 
 export default Home;
+// ✅ Home.jsx - Barcha tasdiqlangan to'yxonalarni ko'rsatadi (bron faqat user uchun)

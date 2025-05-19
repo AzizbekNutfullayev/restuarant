@@ -2,8 +2,8 @@ const express = require("express");
 const router = express.Router();
 
 // ✅ TO‘G‘RI IMPORT nomi va joyi
-const { addToyxonaAdmin } = require("../controllers/admin/addToyxonaAdmin");
-const { getAllToyxonalar } = require("../controllers/admin/getAllToyxona");
+const { addToyxonaAdmin } = require("../controllers/admin/addtoyxonaAdmin");
+const { getAllToyxonalar } = require("../controllers/admin/getAlltoyxona");
 const { approveToyxona, deleteToyxona } = require("../controllers/admin/toyxonaAction");
 
 // ✅ Admin yangi to‘yxona qo‘shadi
