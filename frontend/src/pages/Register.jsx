@@ -21,7 +21,7 @@ const Register = () => {
 
     try {
       await api.post("/auth/register", form);
-      alert("Ro‘yxatdan o‘tildi");
+      alert("Royxatdan otildi");
       navigate("/login");
     } catch (err) {
       alert("Xatolik: " + err.response?.data?.message);
@@ -30,7 +30,7 @@ const Register = () => {
 
   return (
     <div className="login-container">
-      <h2>Owner Ro‘yxatdan O‘tish</h2>
+      <h2>Owner Royxatdan Otish</h2>
       <form onSubmit={handleSubmit}>
         <input name="firstname" onChange={handleChange} placeholder="Ism" required />
         <input name="lastname" onChange={handleChange} placeholder="Familiya" required />

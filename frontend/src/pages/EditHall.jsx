@@ -5,7 +5,7 @@ import axios from "axios";
 import Navbar from "../components/Navbar";
 
 const EditHall = () => {
-  const { id } = useParams(); // URL'dan ID
+  const { id } = useParams(); 
   const navigate = useNavigate();
   const [form, setForm] = useState({
     name: "",
@@ -32,7 +32,7 @@ const EditHall = () => {
     setMessage("");
     try {
       await axios.patch(`http://localhost:1111/toyxonalar/${id}`, form);
-      setMessage("To‘yxona yangilandi");
+      setMessage("Toyxona yangilandi");
       navigate("/owner");
     } catch (err) {
       console.error("Yangilashda xatolik:", err);
@@ -44,7 +44,7 @@ const EditHall = () => {
     <>
       <Navbar />
       <div className="login-container" style={{ maxWidth: "600px" }}>
-        <h2>To‘yxona Tahrirlash</h2>
+        <h2>Toyxona Tahrirlash</h2>
         {message && <p style={{ color: "green" }}>{message}</p>}
         <form onSubmit={handleSubmit}>
           <label>Nomi</label>
@@ -59,7 +59,7 @@ const EditHall = () => {
           <label>Narxi ($)</label>
           <input name="seat_price" type="number" value={form.seat_price} onChange={handleChange} required />
 
-          <label>Sig‘imi</label>
+          <label>Sigimi</label>
           <input name="seat_count" type="number" value={form.seat_count} onChange={handleChange} required />
 
           <label>Telefon</label>

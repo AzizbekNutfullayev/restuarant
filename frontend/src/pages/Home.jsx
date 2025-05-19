@@ -1,14 +1,12 @@
-// ✅ Home.jsx - Barcha tasdiqlangan to'yxonalarni ko'rsatadi (bron faqat user uchun)
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Navbar from "../components/Navbar";
 
 const Home = () => {
   const [halls, setHalls] = useState([]);
-  const [user, setUser] = useState(null); // LocalStorage'dan user ma'lumotini olish
+  const [user, setUser] = useState(null); 
 
   useEffect(() => {
-    // Foydalanuvchini localStorage'dan olish (agar mavjud bo‘lsa)
     const storedToken = localStorage.getItem("token");
     const storedUser = localStorage.getItem("user");
 
@@ -25,7 +23,6 @@ const Home = () => {
 
   const handleBron = (id) => {
     alert(`Bron qilish sahifasiga yo'naltiriladi (Hall ID: ${id})`);
-    // navigate(`/hall/${id}`) yoki /bronlashga yo'naltirish
   };
 
   return (

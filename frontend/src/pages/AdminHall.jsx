@@ -61,7 +61,7 @@ const AdminAddHall = () => {
     <>
       <Navbar />
       <div className="login-container" style={{ maxWidth: "600px" }}>
-        <h2>Admin: Yangi To‘yxona Qo‘shish</h2>
+        <h2>Admin: Yangi Toyxona Qoshish</h2>
         {message && <p style={{ color: "green" }}>{message}</p>}
         <form onSubmit={handleSubmit}>
           <label>Nomi</label>
@@ -81,7 +81,7 @@ const AdminAddHall = () => {
             required
           />
 
-          <label>Sig‘imi (kishilar soni)</label>
+          <label>Sigimi (kishilar soni)</label>
           <input
             name="seat_count"
             type="number"
@@ -92,7 +92,7 @@ const AdminAddHall = () => {
           <label>Telefon</label>
           <input name="phone" onChange={handleChange} required />
 
-          <button type="submit">Qo‘shish</button>
+          <button type="submit">Qoshish</button>
         </form>
       </div>
     </>
