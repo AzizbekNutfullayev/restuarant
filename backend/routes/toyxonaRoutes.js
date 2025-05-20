@@ -10,4 +10,5 @@ router.patch("/:id", updateToyxona);
 router.post('/toyxona',toyxonalr)
 router.get('/owner/:id', viewToyxona);
 
+
 module.exports = router;

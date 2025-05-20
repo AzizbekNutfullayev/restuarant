@@ -118,81 +118,108 @@ body {
 }
 
 /* === Home Page === */
-.home-page {
-  max-width: 1200px;
-  margin: 40px auto;
-  padding: 0 20px;
+/* Misol uchun App.css fayliga qo'shing */
+.container {
+  padding: 20px;
+  max-width: 1000px;
+  margin: auto;
 }
 
-.home-page h1 {
-  font-size: 26px;
-  margin-bottom: 20px;
+.title {
+  text-align: center;
+  margin-bottom: 30px;
   color: #333;
 }
 
-.filter-bar {
+.loading,
+.error,
+.no-halls {
+  text-align: center;
+  color: #666;
+}
+
+.hall-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.hall-card {
+  background: #f9f9f9;
+  padding: 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s ease;
+  box-shadow: 0 0 5px rgba(0,0,0,0.1);
+}
+.hall-card:hover {
+  background: #e6f2ff;
+}
+
+.placeholder-image {
+  background: #ddd;
+  height: 150px;
+  margin-bottom: 10px;
   display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #777;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  padding: 25px;
+  width: 90%;
+  max-width: 500px;
+  border-radius: 10px;
+  position: relative;
+}
+
+.close-button {
+  position: absolute;
+  right: 15px;
+  top: 10px;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.bron-form {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
   gap: 10px;
-  margin-bottom: 20px;
 }
 
-.filter-bar select, .filter-bar input, .filter-bar button {
+.bron-form input {
   padding: 10px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
+  font-size: 16px;
 }
 
-.filter-bar button {
+.bron-button {
+  padding: 12px;
   background-color: #007bff;
   color: white;
   font-weight: bold;
   border: none;
   cursor: pointer;
+  border-radius: 5px;
 }
-
-.hall-list {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+.bron-button:hover {
+  background-color: #0056b3;
 }
-
-.hall-card {
-  display: flex;
-  background-color: #fff;
-  border-radius: 10px;
-  padding: 16px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-  align-items: center;
-  gap: 20px;
-}
-
-.hall-card img {
-  width: 100px;
-  height: 80px;
-  object-fit: cover;
-  border-radius: 8px;
-}
-
-.hall-card h3 {
-  margin: 0;
-  color: #222;
-}
-
-.hall-card p {
-  margin: 4px 0;
-  color: #555;
-}
-
-.hall-card button {
-  margin-left: auto;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 10px 14px;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
 
 
 

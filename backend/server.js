@@ -4,6 +4,7 @@ const authRoutes = require("./routes/authRoutes");
 const toyxonaRoutes = require("./routes/toyxonaRoutes");
 const adminRoutes = require("./routes/adminRoutes");
 const usersRoutes = require("./routes/usersRoutes");
+const bronRoutes = require('./routes/bronRoutes');
 
 const app = express();
 
@@ -24,6 +25,11 @@ app.use('/admin',adminRoutes)
 //user
 app.use('/user',usersRoutes)
 
+
+// bron
+app.use('/api/bron', bronRoutes);
+
+// bronlar
 app.listen(1111, () => {
   console.log("Server is running on port 1111");
 });

@@ -14,6 +14,7 @@ import "./App.css";
 import Register from "./pages/Register";
 import AdminAddHall from "./pages/AdminHall";
 import EditHall from "./pages/EditHall";
+import BronPage from "./pages/BronPage";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
           <Route path="/add-hall" element={<AddHall />} />
           <Route path="/all-bookings" element={<AllBookings />} />
           <Route path="/admin/add-hall" element={<AdminAddHall />} />
+          <Route path="/bron/:id" element={<BronPage />} />
           <Route path="/edit-hall/:id" element={<EditHall />} />
         </Routes>
       </BrowserRouter>
