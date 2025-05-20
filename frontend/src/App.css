@@ -271,3 +271,37 @@ body {
 .table tr:hover {
   background-color: #f9f9f9;
 }
+
+
+/* admin bron */
+.container {
+  max-width: 1000px;
+  margin: auto;
+  padding: 20px;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.bron-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.bron-table th,
+.bron-table td {
+  padding: 10px;
+  border: 1px solid #ddd;
+  text-align: center;
+}
+
+.bron-table th {
+  background-color: #f4f4f4;
+}
+
+.error {
+  color: red;
+  text-align: center;
+}

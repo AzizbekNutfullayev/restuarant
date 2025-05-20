@@ -15,6 +15,8 @@ import Register from "./pages/Register";
 import AdminAddHall from "./pages/AdminHall";
 import EditHall from "./pages/EditHall";
 import BronPage from "./pages/BronPage";
+import AdminBronlar from "./pages/AdminBronlar";
+import OwnerBronlar from "./pages/OwnerBronlar";
 
 function App() {
   return (
@@ -29,6 +31,8 @@ function App() {
           <Route path="/owner" element={<OwnerDashboard />} />
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/profile" element={<UserProfile />} />
+          <Route path="/admin/bronlar" element={<AdminBronlar />} />
+          <Route path="/owner/bronlar/:owner_id" element={<OwnerBronlar />} />
           <Route path="/add-hall" element={<AddHall />} />
           <Route path="/all-bookings" element={<AllBookings />} />
           <Route path="/admin/add-hall" element={<AdminAddHall />} />

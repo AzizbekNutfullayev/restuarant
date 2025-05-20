@@ -30,3 +30,41 @@ exports.createBron = async (req, res) => {
     res.status(500).json({ message: '❌ Server xatoligi' });
   }
 };
+
+
+exports.getAllBronlar = async (req, res) => {
+  try {
+    const result = await db.query(`
+      SELECT b.id, b.name, b.phone, b.date, b.count_people, b.status,
+             t.name AS toyxona_name
+      FROM bronlar b
+      JOIN toyxonalar t ON b.toyxona_id = t.id
+      ORDER BY b.date DESC
+    `);
+
+    res.status(200).json({ data: result.rows });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Bronlarni olishda xatolik' });
+  }
+};
+
+
+exports.getOwnerBronlar = async (req, res) => {
+  const { owner_id } = req.params;
+
+  try {
+    const result = await db.query(`
+      SELECT b.*, t.name AS toyxona_name
+      FROM bronlar b
+      JOIN toyxonalar t ON b.toyxona_id = t.id
+      WHERE t.owner_id = $1
+      ORDER BY b.date DESC
+    `, [owner_id]);
+
+    res.status(200).json({ data: result.rows });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Owner bronlarni olishda xatolik" });
+  }
+};

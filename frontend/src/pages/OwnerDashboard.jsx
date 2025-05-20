@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Navbar from "../components/Navbar";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom"; // 👈 qo‘shildi
 
 const OwnerDashboard = () => {
   const [halls, setHalls] = useState([]);
   const [user, setUser] = useState(null);
-
-
+  const navigate = useNavigate(); // 👈 yo‘naltirish uchun
 
   useEffect(() => {
     const stored = localStorage.getItem("user");
@@ -28,15 +27,22 @@ const OwnerDashboard = () => {
     return <div className="login-container">Faqat ownerlar uchun sahifa</div>;
   }
 
-  
-
   return (
     <>
       <Navbar />
       <div className="home-page">
-        <h2>Men qoshgan toyxonalar</h2>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <h2>Men qo‘shgan to’yxonalar</h2>
+          <button
+            onClick={() => navigate(`/owner/bronlar/${user.userId}`)}
+            style={{ padding: "10px 15px", backgroundColor: "#007bff", color: "#fff", border: "none", borderRadius: "5px" }}
+          >
+            Bron qilinganlar
+          </button>
+        </div>
+
         {halls.length === 0 ? (
-          <p>Siz hali hech qanday toyxona qoshmagansiz.</p>
+          <p>Siz hali hech qanday to‘yxona qo‘shmagansiz.</p>
         ) : (
           <div className="hall-list">
             {halls.map((hall) => (
