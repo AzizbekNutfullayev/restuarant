@@ -14,7 +14,9 @@ app.use(cors({
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
+
 app.use(express.json());
+app.use('/uploads', express.static('uploads'));
 // login and register
 app.use("/auth", authRoutes);
 
