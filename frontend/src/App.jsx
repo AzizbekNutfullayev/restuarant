@@ -10,7 +10,6 @@ import AdminDashboard from "./pages/AdminDashboard";
 import AddHall from "./pages/AddHall";
 import UserProfile from "./pages/UserProfile";
 import AllBookings from "./pages/AllBookings";
-import "./App.css";
 import Register from "./pages/Register";
 import AdminAddHall from "./pages/AdminHall";
 import EditHall from "./pages/EditHall";
