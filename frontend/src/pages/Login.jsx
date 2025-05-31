@@ -8,6 +8,9 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [failCount, setFailCount] = useState(0);
+
+  const MAX_FAIL = 3; // maksimal xatoliklar soni
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -16,17 +19,19 @@ const Login = () => {
     try {
       const res = await axios.post("http://localhost:1111/auth/login", {
         username,
-        password
+        password,
       });
 
+      setFailCount(0); // muvaffaqiyatda fail countni reset qilamiz
+
       const token = res.data.token;
-      const payload = JSON.parse(atob(token.split(".")[1])); 
+      const payload = JSON.parse(atob(token.split(".")[1]));
 
       const user = {
         userId: payload.userId,
         username: payload.username,
         role: payload.role,
-        token
+        token,
       };
 
       localStorage.setItem("token", token);
@@ -37,8 +42,15 @@ const Login = () => {
       else navigate("/");
 
     } catch (err) {
-      console.error("Login xatoligi:", err);
-      setError("Login muvaffaqiyatsiz");
+      setFailCount((prev) => prev + 1);
+      const attemptsLeft = MAX_FAIL - (failCount + 1);
+
+      if (attemptsLeft > 0) {
+        setError(`Login muvaffaqiyatsiz. Qolgan urinishlar: ${attemptsLeft}`);
+      } else {
+        alert("3 marta noto‘g‘ri parol kiritdingiz! Iltimos, ro‘yxatdan o‘ting.");
+        navigate("/register");
+      }
     }
   };
 
