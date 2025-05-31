@@ -1,6 +1,4 @@
-/* App.css - Barcha sahifalar uchun zamonaviy va chiroyli CSS */
 
-/* === General Reset === */
 body {
   margin: 0;
   padding: 0;
@@ -9,7 +7,6 @@ body {
   color: #333;
 }
 
-/* === Navbar === */
 .navbar {
   background: #ffffff;
   display: flex;
@@ -102,7 +99,7 @@ body {
   color: #4a90e2;
 }
 
-/* === General Container === */
+
 .container, .home-page {
   max-width: 1200px;
   margin: 80px auto;
@@ -115,7 +112,7 @@ body {
   color: #1a1a1a;
   margin-bottom: 30px;
   background: linear-gradient(to right, #4a90e2, #9013fe);
-  -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   animation: fadeIn 1s ease-in-out;
 }
@@ -125,7 +122,7 @@ h2 { font-size: 32px; }
 h3 { font-size: 24px; }
 h4 { font-size: 20px; }
 
-/* === Login, Register, UserProfile, EditHall, AdminAddHall, AddHall === */
+
 .login-container {
   max-width: 600px;
   margin: 80px auto;
@@ -250,7 +247,6 @@ h4 { font-size: 20px; }
   height: 300px;
 }
 
-/* === Home Page, OwnerDashboard, AdminDashboard === */
 .hall-list {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -410,7 +406,6 @@ h4 { font-size: 20px; }
   transform: rotate(90deg);
 }
 
-/* === Form Styles === */
 .bron-form, .login-container form {
   display: flex;
   flex-direction: column;
@@ -490,7 +485,7 @@ h4 { font-size: 20px; }
   height: 300px;
 }
 
-/* === Loading, Error, No Halls === */
+
 .loading, .error, .no-halls {
   text-align: center;
   font-size: 18px;
@@ -515,7 +510,7 @@ h4 { font-size: 20px; }
   background: #f8f9ff;
 }
 
-/* === HallDetails Calendar === */
+
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -553,7 +548,6 @@ h4 { font-size: 20px; }
   transform: none;
 }
 
-/* === Tables (MyBookings, OwnerBronlar, AdminBronlar, AllBookings) === */
 .table, .bron-table {
   width: 100%;
   border-collapse: collapse;
@@ -585,7 +579,7 @@ h4 { font-size: 20px; }
   background: #f0f4ff;
 }
 
-/* === File Input for AddHall === */
+
 .login-container input[type="file"] {
   padding: 10px;
   border: 2px solid #e0e4ec;
