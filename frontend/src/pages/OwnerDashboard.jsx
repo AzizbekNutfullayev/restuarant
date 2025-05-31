@@ -6,6 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 const OwnerDashboard = () => {
   const [halls, setHalls] = useState([]);
   const [user, setUser] = useState(null);
+  const [image, setImage] = useState(null); // Rasmni saqlash uchun state
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -15,16 +16,40 @@ const OwnerDashboard = () => {
       setUser(parsed);
 
       if (parsed.role === "owner") {
+        // To'yxonalar ro'yxatini olish
         axios
           .get(`http://localhost:1111/toyxonalar/owner/${parsed.userId}`)
-          .then((res) => setHalls(res.data))
+          .then((res) => {
+            console.log("Toyxonalar ma'lumotlari:", res.data);
+            setHalls(res.data);
+          })
           .catch((err) => console.error("Xatolik:", err));
+
+        // Rasmni olish
+        axios
+          .get(`http://localhost:1111/toyxonalar/getImg/${parsed.userId}`, {
+            responseType: "arraybuffer", // Rasmni arraybuffer sifatida olish
+          })
+          .then((res) => {
+            // FileReader yordamida base64 formatiga o‘zgartirish
+            const reader = new FileReader();
+            reader.onloadend = () => {
+              const base64Image = reader.result;
+              setImage(base64Image);
+            };
+            reader.readAsDataURL(new Blob([res.data])); // Binar ma'lumotni base64 formatiga o‘zgartirish
+          })
+          .catch((err) => {
+            console.error("Rasmni olishda xatolik:", err);
+          });
       }
     }
   }, []);
+
   if (!user || user.role !== "owner") {
     return <div className="login-container">Faqat ownerlar uchun sahifa</div>;
   }
+
   return (
     <>
       <Navbar />
@@ -37,7 +62,7 @@ const OwnerDashboard = () => {
             marginBottom: "20px",
           }}
         >
-          <h2>Men qo‘shgan to’yxonalar</h2>
+          <h2>Men qo‘shgan to‘yxonalar</h2>
           <button
             onClick={() => navigate(`/owner/bronlar/${user.userId}`)}
             style={{
@@ -52,6 +77,7 @@ const OwnerDashboard = () => {
             Bron qilinganlar
           </button>
         </div>
+
         {halls.length === 0 ? (
           <p>Siz hali hech qanday to‘yxona qo‘shmagansiz.</p>
         ) : (
@@ -71,13 +97,33 @@ const OwnerDashboard = () => {
               >
                 {hall.image ? (
                   <img
-                    src={`http://localhost:1111/uploads/${hall.image}`}
+                    src={`data:image/jpeg;base64,${hall.image}`}
                     alt={hall.name}
-                    style={{ width: '200px', height: 'auto', marginBottom: '10px' }}
+                    style={{
+                      width: "100%",
+                      height: "200px",
+                      objectFit: "cover",
+                      marginBottom: "10px",
+                    }}
                   />
                 ) : (
-                  <p>Rasm mavjud emas</p>
+                  <div
+                    style={{
+                      width: "100%",
+                      height: "200px",
+                      backgroundColor: "#eee",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      marginBottom: "10px",
+                      color: "#888",
+                      fontSize: "14px",
+                    }}
+                  >
+                    Rasm mavjud emas
+                  </div>
                 )}
+
                 <h3>{hall.name}</h3>
                 <p>
                   <strong>Rayon:</strong> {hall.rayon}

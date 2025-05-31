@@ -7,11 +7,13 @@ const { addToyxona } = require("../controllers/restuarant/addToyxonalar");
 const authMiddleware = require("../middleware/authentication");
 const uploadMiddleware = require("../middleware/uploadMiddleware");
 const { uploadToyxonaImages } = require("../controllers/restuarant/imgUplodes");
+const { getImgs } = require("../controllers/restuarant/getimg");
 
 router.post("/",addToyxona); 
 router.patch("/:id", updateToyxona);
 router.post('/toyxona',toyxonalr)
 router.get('/owner/:id', viewToyxona);
 router.post("/upload-images", authMiddleware, uploadMiddleware, uploadToyxonaImages);
+router.get('/getImg/:id', getImgs);
 
 module.exports = router;
