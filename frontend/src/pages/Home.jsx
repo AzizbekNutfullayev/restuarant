@@ -159,10 +159,10 @@ const Home = () => {
               <p><strong>Manzil:</strong> {selectedHall.address}</p>
               <p><strong>Sig'imi:</strong> {selectedHall.seat_count} kishi</p>
               <p><strong>Narx:</strong> ${selectedHall.seat_price}</p>
-              <p><strong>Telefon:</strong> {selectedHall.phone}</p>
+              <p><strong>Telefonn:</strong> {selectedHall.phone}</p>
 
               <form onSubmit={handleSubmit} className="bron-form">
-                <input
+                <inputnn
                   type="text"
                   placeholder="Ismingiz"
                   value={name}
