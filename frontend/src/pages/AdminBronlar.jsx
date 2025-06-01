@@ -75,13 +75,6 @@ const AdminBronlar = () => {
           <option value="past">Bo‘lib o‘tgan</option>
         </select>
 
-        <select value={rayonFilter} onChange={(e) => setRayonFilter(e.target.value)}>
-          <option value="">Rayon: barchasi</option>
-          {[...new Set(bronlar.map((b) => b.rayon))].map((rayon, i) => (
-            <option key={i} value={rayon}>{rayon}</option>
-          ))}
-        </select>
-
         <select value={sortOrder} onChange={(e) => setSortOrder(e.target.value)}>
           <option value="desc">Sana: eng yangi → eski</option>
           <option value="asc">Sana: eski → yangi</option>
@@ -91,7 +84,7 @@ const AdminBronlar = () => {
       <table className="bron-table">
         <thead>
           <tr>
-            <th>To‘yxona</th>
+            <th>Toyxona</th>
             <th>Rayon</th>
             <th>Ism</th>
             <th>Telefon</th>
@@ -112,7 +105,7 @@ const AdminBronlar = () => {
               <td>{b.count_people}</td>
               <td>{getStatus(b.date)}</td>
               <td>
-                <button onClick={() => handleDelete(b.id)}>❌ O‘chirish</button>
+                <button onClick={() => handleDelete(b.id)}>Ochirish</button>
               </td>
             </tr>
           ))}
