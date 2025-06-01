@@ -16,7 +16,11 @@ app.use(cors({
 
 
 app.use(express.json());
-app.use('/uploads', express.static('uploads'));
+
+// resturant 
+const path = require('path');
+app.use('/uploads', express.static(path.join(__dirname, './uploads')));
+
 // login and register
 app.use("/auth", authRoutes);
 

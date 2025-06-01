@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Navbar from "../components/Navbar";
@@ -14,7 +13,7 @@ const Home = () => {
 
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
-  const [date, setDate] = useState("");
+  const [date, setDate] = useState(null);
   const [count_people, setCountPeople] = useState("");
 
   const [bookedDates, setBookedDates] = useState([]);
@@ -24,28 +23,45 @@ const Home = () => {
   const [minCapacity, setMinCapacity] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
 
+  // To'yxonalarni yuklash
   useEffect(() => {
     const loadHalls = async () => {
       try {
+        console.log("To'yxonalar ma'lumotlari yuklanmoqda...");
         setLoading(true);
-        const res = await axios.get("http://localhost:1111/user/");
-        setHalls(res.data.data || []);
+        const res = await axios.get("http://localhost:1111/user/img");
+        console.log("Backenddan ma'lumot keldi:", res.data);
+
+        // To'liq URL yaratish
+        const hallsWithFullImageUrl = res.data.map(hall => ({
+          ...hall,
+          image: hall.image ? `http://localhost:1111/${hall.image}` : null
+        }));
+
+        setHalls(hallsWithFullImageUrl);
+        console.log("To'yxonalar state ga o'rnatildi:", hallsWithFullImageUrl);
       } catch (err) {
+        console.error("To'yxonalarni yuklashda xatolik:", err);
         setError("To'yxonalarni yuklashda xatolik: " + (err.response?.data?.message || err.message));
       } finally {
         setLoading(false);
+        console.log("To'yxonalar yuklanish jarayoni tugadi");
       }
     };
     loadHalls();
   }, []);
 
+  // Tanlangan to'yxonaning band sanalarini olish
   useEffect(() => {
+    if (!selectedHall) return;
+
     const getBookedDates = async () => {
-      if (!selectedHall) return;
       try {
+        console.log("Band sanalar olinmoqda, tanlangan to'yxona:", selectedHall);
         const res = await axios.get(`http://localhost:1111/api/bron/hall/${selectedHall.id}`);
-        const formatted = res.data.map(d => new Date(d.date));
+        const formatted = res.data.map((d) => new Date(d.date));
         setBookedDates(formatted);
+        console.log("Band sanalar (Date obyektlari):", formatted);
       } catch (err) {
         console.error("Band sanalarni olishda xatolik:", err);
       }
@@ -54,37 +70,46 @@ const Home = () => {
   }, [selectedHall]);
 
   const openModal = (hall) => {
+    console.log("Modal ochilmoqda, tanlangan to'yxona:", hall);
     setSelectedHall(hall);
     setIsModalOpen(true);
   };
 
   const closeModal = () => {
+    console.log("Modal yopilmoqda");
     setIsModalOpen(false);
     setSelectedHall(null);
     setName("");
     setPhone("");
-    setDate("");
+    setDate(null);
     setCountPeople("");
+    setBookedDates([]);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("Bron formasi yuborilmoqda...");
     try {
-      await axios.post("http://localhost:1111/api/bron/create", {
+      const payload = {
         toyxona_id: selectedHall.id,
         name,
         phone,
         date,
         count_people,
-      });
+      };
+      console.log("Bron uchun yuborilayotgan ma'lumotlar:", payload);
+
+      await axios.post("http://localhost:1111/api/bron/create", payload);
+
       alert("Bron qilindi!");
       closeModal();
     } catch (err) {
-      console.error(err);
+      console.error("Bron qilishda xatolik:", err);
       alert("Bron qilishda xatolik: " + (err.response?.data?.message || err.message));
     }
   };
 
+  // Filtrlash va saralash
   const filteredAndSortedHalls = halls
     .filter(
       (hall) =>
@@ -97,6 +122,8 @@ const Home = () => {
       if (sortOrder === "desc") return b.seat_price - a.seat_price;
       return 0;
     });
+
+  console.log("Filterlangan va saralangan to'yxonalar:", filteredAndSortedHalls);
 
   return (
     <>
@@ -140,7 +167,36 @@ const Home = () => {
           <div className="hall-list">
             {filteredAndSortedHalls.map((hall) => (
               <div key={hall.id} className="hall-card" onClick={() => openModal(hall)}>
-                <div className="placeholder-image">To'yxona rasmi</div>
+                {hall.image ? (
+                  <img
+                    src={hall.image}
+                    alt={hall.name}
+                    style={{
+                      width: "100%",
+                      height: 150,
+                      objectFit: "cover",
+                      borderRadius: "8px",
+                      marginBottom: "10px",
+                    }}
+                  />
+                ) : (
+                  <div
+                    style={{
+                      width: "100%",
+                      height: 150,
+                      backgroundColor: "#eee",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      color: "#888",
+                      borderRadius: "8px",
+                      fontSize: 14,
+                      marginBottom: "10px",
+                    }}
+                  >
+                    Rasm mavjud emas
+                  </div>
+                )}
                 <h3>{hall.name}</h3>
                 <p>Rayon: {hall.rayon}</p>
                 <p>Sigim: {hall.seat_count}</p>
@@ -177,8 +233,8 @@ const Home = () => {
                   required
                 />
                 <DatePicker
-                  selected={date ? new Date(date) : null}
-                  onChange={(date) => setDate(date.toISOString().split("T")[0])}
+                  selected={date}
+                  onChange={(date) => setDate(date)}
                   minDate={new Date()}
                   excludeDates={bookedDates}
                   placeholderText="Sanani tanlang"
