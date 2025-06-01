@@ -2,7 +2,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import HallDetails from "./pages/HallDetails";
 import Login from "./pages/Login";
-
 import Home from "./pages/Home";
 import MyBookings from "./pages/MyBookings";
 import OwnerDashboard from "./pages/OwnerDashboard";

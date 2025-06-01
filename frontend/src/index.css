@@ -9,6 +9,125 @@ body {
 
 .navbar {
   background: #ffffff;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+  min-height: 100vh;
+}
+body:not(.register-page):not(.login-page) {
+  background: url('https://baku.ws/storage/photos/uploads/thumbs/large/NirJMMOmHV48ghaDFT0gVeM4YOQVagJ7faFJPv5u.webp') no-repeat center center fixed,
+              url('https://strg2.restoran.kz/neofiles/serve-image/5746d71d579f243af3000109/1280x720') no-repeat center center fixed,
+              url('https://astana.restoran.kz/neofiles/serve/5b90e923d062913b904e4e34') no-repeat center center fixed;
+  background-size: cover;
+  animation: slideBackground 15s infinite ease-in-out;
+}
+
+
+body.register-page, body.login-page {
+  background: linear-gradient(135deg, #f2f5f9, #e8edf5);
+}
+.register-page, .login-page {
+  background-image: url('https://i.pinimg.com/236x/7a/eb/0e/7aeb0e8ada06c6ce84dbc0bc88f01c36.jpg');
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+}
+
+
+
+@keyframes slideBackground {
+  0% {
+    background: url('https://baku.ws/storage/photos/uploads/thumbs/large/NirJMMOmHV48ghaDFT0gVeM4YOQVagJ7faFJPv5u.webp') no-repeat center center fixed;
+    background-size: cover;
+  }
+  33.33% {
+    background: url('https://strg2.restoran.kz/neofiles/serve-image/5746d71d579f243af3000109/1280x720') no-repeat center center fixed;
+    background-size: cover;
+  }
+  66.66% {
+    background: url('https://astana.restoran.kz/neofiles/serve/5b90e923d062913b904e4e34') no-repeat center center fixed;
+    background-size: cover;
+  }
+  100% {
+    background: url('https://baku.ws/storage/photos/uploads/thumbs/large/NirJMMOmHV48ghaDFT0gVeM4YOQVagJ7faFJPv5u.webp') no-repeat center center fixed;
+    background-size: cover;
+  }
+}
+/* === Filter and Sort Section === */
+.filter-sort {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 30px;
+  justify-content: center;
+  align-items: center;
+}
+
+.filter-sort input,
+.filter-sort select {
+  padding: 12px 16px;
+  border: 2px solid #e0e4ec;
+  border-radius: 10px;
+  font-size: 15px;
+  background: #fafbff;
+  transition: all 0.3s ease;
+  outline: none;
+  min-width: 200px;
+  max-width: 100%;
+}
+
+.filter-sort input:focus,
+.filter-sort select:focus {
+  border-color: #4a90e2;
+  box-shadow: 0 0 8px rgba(74, 144, 226, 0.4);
+  background: #ffffff;
+}
+
+.filter-sort input::placeholder {
+  color: #a0a0a0;
+  font-style: italic;
+}
+
+.filter-sort input:focus::placeholder {
+  opacity: 0.5;
+  transform: translateX(5px);
+}
+
+.filter-sort select {
+  appearance: none;
+  background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2212%22%20height%3D%228%22%20viewBox%3D%220%200%2012%208%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M1%201L6%206L11%201%22%20stroke%3D%22%23666%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E');
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 36px;
+}
+
+@media (max-width: 768px) {
+  .filter-sort {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-sort input,
+  .filter-sort select {
+    min-width: auto;
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .filter-sort input,
+  .filter-sort select {
+    font-size: 14px;
+    padding: 10px 14px;
+  }
+}
+
+.navbar {
+  background: rgba(255, 255, 255, 0.95);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -18,6 +137,8 @@ body {
   top: 0;
   z-index: 1000;
   transition: all 0.3s ease;
+
+  backdrop-filter: blur(5px);
 }
 
 .navbar:hover {
@@ -100,10 +221,15 @@ body {
 }
 
 
+/* === General Container === */
 .container, .home-page {
   max-width: 1200px;
   margin: 80px auto;
   padding: 0 20px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 15px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(3px);
 }
 
 .title, h1, h2, h3, h4 {
@@ -127,12 +253,14 @@ h4 { font-size: 20px; }
   max-width: 600px;
   margin: 80px auto;
   background: linear-gradient(135deg, #ffffff, #f8f9ff);
+  background: rgba(255, 255, 255, 0.95);
   padding: 35px 45px;
   border-radius: 20px;
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
   position: relative;
   overflow: hidden;
   transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
 }
 
 .login-container:hover {
@@ -247,6 +375,8 @@ h4 { font-size: 20px; }
   height: 300px;
 }
 
+
+
 .hall-list {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -256,6 +386,7 @@ h4 { font-size: 20px; }
 
 .hall-card {
   background: #ffffff;
+  background: rgba(255, 255, 255, 0.95);
   border-radius: 15px;
   padding: 20px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
@@ -263,6 +394,7 @@ h4 { font-size: 20px; }
   cursor: pointer;
   position: relative;
   overflow: hidden;
+  backdrop-filter: blur(3px);
 }
 
 .hall-card:hover {
@@ -406,6 +538,7 @@ h4 { font-size: 20px; }
   transform: rotate(90deg);
 }
 
+/* === Form Styles === */
 .bron-form, .login-container form {
   display: flex;
   flex-direction: column;
@@ -484,7 +617,6 @@ h4 { font-size: 20px; }
   width: 300px;
   height: 300px;
 }
-
 
 .loading, .error, .no-halls {
   text-align: center;
@@ -578,7 +710,6 @@ h4 { font-size: 20px; }
 .table tr:hover, .bron-table tr:hover {
   background: #f0f4ff;
 }
-
 
 .login-container input[type="file"] {
   padding: 10px;

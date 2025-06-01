@@ -3,7 +3,7 @@ import { useState } from "react";
 import axios from "axios";
 
 const BronPage = () => {
-  const { id } = useParams(); // URL'dan toyxona ID
+  const { id } = useParams();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     date: "",
