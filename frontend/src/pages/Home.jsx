@@ -23,7 +23,6 @@ const Home = () => {
   const [minCapacity, setMinCapacity] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
 
-  // To'yxonalarni yuklash
   useEffect(() => {
     const loadHalls = async () => {
       try {
@@ -32,7 +31,6 @@ const Home = () => {
         const res = await axios.get("http://localhost:1111/user/img");
         console.log("Backenddan ma'lumot keldi:", res.data);
 
-        // To'liq URL yaratish
         const hallsWithFullImageUrl = res.data.map(hall => ({
           ...hall,
           image: hall.image ? `http://localhost:1111/${hall.image}` : null
@@ -51,7 +49,6 @@ const Home = () => {
     loadHalls();
   }, []);
 
-  // Tanlangan to'yxonaning band sanalarini olish
   useEffect(() => {
     if (!selectedHall) return;
 
@@ -109,7 +106,6 @@ const Home = () => {
     }
   };
 
-  // Filtrlash va saralash
   const filteredAndSortedHalls = halls
     .filter(
       (hall) =>

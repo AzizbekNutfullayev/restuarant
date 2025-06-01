@@ -6,7 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 const OwnerDashboard = () => {
   const [halls, setHalls] = useState([]);
   const [user, setUser] = useState(null);
-  const [image, setImage] = useState(null); // Rasmni saqlash uchun state
+  const [image, setImage] = useState(null); 
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -16,7 +16,6 @@ const OwnerDashboard = () => {
       setUser(parsed);
 
       if (parsed.role === "owner") {
-        // To'yxonalar ro'yxatini olish
         axios
           .get(`http://localhost:1111/toyxonalar/owner/${parsed.userId}`)
           .then((res) => {
@@ -25,19 +24,17 @@ const OwnerDashboard = () => {
           })
           .catch((err) => console.error("Xatolik:", err));
 
-        // Rasmni olish
         axios
           .get(`http://localhost:1111/toyxonalar/getImg/${parsed.userId}`, {
-            responseType: "arraybuffer", // Rasmni arraybuffer sifatida olish
+            responseType: "arraybuffer", 
           })
           .then((res) => {
-            // FileReader yordamida base64 formatiga o‘zgartirish
             const reader = new FileReader();
             reader.onloadend = () => {
               const base64Image = reader.result;
               setImage(base64Image);
             };
-            reader.readAsDataURL(new Blob([res.data])); // Binar ma'lumotni base64 formatiga o‘zgartirish
+            reader.readAsDataURL(new Blob([res.data])); 
           })
           .catch((err) => {
             console.error("Rasmni olishda xatolik:", err);

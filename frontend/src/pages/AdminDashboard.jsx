@@ -6,7 +6,7 @@ import Navbar from "../components/Navbar";
 const AdminDashboard = () => {
   const [halls, setHalls] = useState([]);
   const [error, setError] = useState("");
-  const navigate = useNavigate(); // 👈 navigator hook
+  const navigate = useNavigate(); 
 
   const fetchHalls = () => {
     axios.get("http://localhost:1111/admin/toyxonalar")

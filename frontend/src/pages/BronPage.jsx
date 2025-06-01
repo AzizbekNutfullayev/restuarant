@@ -46,12 +46,12 @@ const BronPage = () => {
         }
       );
 
-      alert("✅ Bron muvaffaqiyatli qilindi!");
-      navigate("/"); // yoki `/my-bron` sahifaga yo'naltirish mumkin
+      alert(" Bron muvaffaqiyatli qilindi!");
+      navigate("/"); 
     } catch (err) {
       console.error(err);
       setError(
-        err.response?.data?.message || "❌ Bron qilishda xatolik yuz berdi"
+        err.response?.data?.message || " Bron qilishda xatolik yuz berdi"
       );
     } finally {
       setLoading(false);
