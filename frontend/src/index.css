@@ -20,6 +20,13 @@ body:not(.register-page):not(.login-page) {
 body.register-page, body.login-page {
   background: linear-gradient(135deg, #f2f5f9, #e8edf5);
 }
+.register-page, .login-page {
+  background-image: url('https://i.pinimg.com/236x/7a/eb/0e/7aeb0e8ada06c6ce84dbc0bc88f01c36.jpg');
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+}
+
 
 
 @keyframes slideBackground {

@@ -24,7 +24,7 @@ const Navbar = () => {
       <div className="nav-left">
         <Link to="/">Bosh sahifa</Link>
 
-        {user?.role === "owner" && <Link to="/add-hall">Toyxona qshish</Link>}
+        {user?.role === "owner" && <Link to="/add-hall">Toyxona qoshish</Link>}
 
         {user?.role === "admin" && <Link to="/admin/add-hall">Toyxona qoshish</Link>}
       </div>
