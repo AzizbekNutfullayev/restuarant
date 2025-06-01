@@ -1,6 +1,6 @@
-/* App.css - Barcha sahifalar uchun zamonaviy va chiroyli CSS */
 
-/* === General Reset === */
+
+
 body {
   margin: 0;
   padding: 0;
@@ -8,8 +8,6 @@ body {
   color: #333;
   min-height: 100vh;
 }
-
-/* === Slayder fon (Register va Login tashqari) === */
 body:not(.register-page):not(.login-page) {
   background: url('https://baku.ws/storage/photos/uploads/thumbs/large/NirJMMOmHV48ghaDFT0gVeM4YOQVagJ7faFJPv5u.webp') no-repeat center center fixed,
               url('https://strg2.restoran.kz/neofiles/serve-image/5746d71d579f243af3000109/1280x720') no-repeat center center fixed,
@@ -18,12 +16,12 @@ body:not(.register-page):not(.login-page) {
   animation: slideBackground 15s infinite ease-in-out;
 }
 
-/* Register va Login uchun gradient fon */
+
 body.register-page, body.login-page {
   background: linear-gradient(135deg, #f2f5f9, #e8edf5);
 }
 
-/* Slayder animatsiyasi */
+
 @keyframes slideBackground {
   0% {
     background: url('https://baku.ws/storage/photos/uploads/thumbs/large/NirJMMOmHV48ghaDFT0gVeM4YOQVagJ7faFJPv5u.webp') no-repeat center center fixed;
@@ -43,7 +41,7 @@ body.register-page, body.login-page {
   }
 }
 
-/* === Navbar === */
+
 .navbar {
   background: rgba(255, 255, 255, 0.95);
   display: flex;
@@ -154,7 +152,7 @@ body.register-page, body.login-page {
   color: #1a1a1a;
   margin-bottom: 30px;
   background: linear-gradient(to right, #4a90e2, #9013fe);
-  -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   animation: fadeIn 1s ease-in-out;
 }
@@ -164,7 +162,7 @@ h2 { font-size: 32px; }
 h3 { font-size: 24px; }
 h4 { font-size: 20px; }
 
-/* === Login, Register, UserProfile, EditHall, AdminAddHall, AddHall === */
+
 .login-container {
   max-width: 600px;
   margin: 80px auto;
@@ -290,7 +288,7 @@ h4 { font-size: 20px; }
   height: 300px;
 }
 
-/* === Home Page, OwnerDashboard, AdminDashboard === */
+
 .hall-list {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -556,7 +554,7 @@ h4 { font-size: 20px; }
   background: #f8f9ff;
 }
 
-/* === HallDetails Calendar === */
+
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -594,7 +592,7 @@ h4 { font-size: 20px; }
   transform: none;
 }
 
-/* === Tables (MyBookings, OwnerBronlar, AdminBronlar, AllBookings) === */
+
 .table, .bron-table {
   width: 100%;
   border-collapse: collapse;
@@ -626,7 +624,6 @@ h4 { font-size: 20px; }
   background: #f0f4ff;
 }
 
-/* === File Input for AddHall === */
 .login-container input[type="file"] {
   padding: 10px;
   border: 2px solid #e0e4ec;
@@ -650,7 +647,7 @@ h4 { font-size: 20px; }
   background: linear-gradient(45deg, #6f42c1, #4a90e2);
 }
 
-/* === Custom Buttons for OwnerDashboard and AdminDashboard === */
+
 .bron-button {
   padding: 10px 15px;
   background: linear-gradient(45deg, #007bff, #4a90e2);
@@ -681,7 +678,7 @@ h4 { font-size: 20px; }
   box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
 }
 
-/* === Responsive Design === */
+
 @media (max-width: 768px) {
   .container, .home-page {
     margin: 50px auto;
@@ -781,49 +778,5 @@ h4 { font-size: 20px; }
   .calendar-day {
     font-size: 12px;
     padding: 8px;
-  }
-}
-
-/* === Animations === */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fadeInOverlay {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes pulse {
-  0% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.6;
-  }
-  100% {
-    opacity: 1;
   }
 }
