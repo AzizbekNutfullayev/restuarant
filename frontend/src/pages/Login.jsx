@@ -1,50 +1,47 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const Login = () => {
   const navigate = useNavigate();
-
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [failCount, setFailCount] = useState(0);
 
-  const MAX_FAIL = 3; // maksimal xatoliklar soni
+  // body ga .login-page sinfini qo‘shish
+  useEffect(() => {
+    document.body.classList.add('login-page');
+    return () => document.body.classList.remove('login-page');
+  }, []);
+
+  const MAX_FAIL = 3;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-
     try {
       const res = await axios.post("http://localhost:1111/auth/login", {
         username,
         password,
       });
-
-      setFailCount(0); // muvaffaqiyatda fail countni reset qilamiz
-
+      setFailCount(0);
       const token = res.data.token;
       const payload = JSON.parse(atob(token.split(".")[1]));
-
       const user = {
         userId: payload.userId,
         username: payload.username,
         role: payload.role,
         token,
       };
-
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
-
       if (user.role === "admin") navigate("/admin");
       else if (user.role === "owner") navigate("/owner");
       else navigate("/");
-
     } catch (err) {
       setFailCount((prev) => prev + 1);
       const attemptsLeft = MAX_FAIL - (failCount + 1);
-
       if (attemptsLeft > 0) {
         setError(`Login muvaffaqiyatsiz. Qolgan urinishlar: ${attemptsLeft}`);
       } else {
