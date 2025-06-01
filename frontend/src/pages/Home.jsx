@@ -1,33 +1,40 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Navbar from "../components/Navbar";
+
+
 const Home = () => {
   const [halls, setHalls] = useState([]);
   const [selectedHall, setSelectedHall] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Bron formasi uchun state'lar
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [date, setDate] = useState("");
   const [count_people, setCountPeople] = useState("");
 
-  useEffect(() => {
-    const fetchHalls = async () => {
-      try {
-        setLoading(true);
-        const res = await axios.get("http://localhost:1111/user/");
-        setHalls(res.data.data || []);
-      } catch (err) {
-        setError("To'yxonalarni yuklashda xatolik: " + (err.response?.data?.message || err.message));
-      } finally {
-        setLoading(false);
-      }
-    };
+  const [rayonFilter, setRayonFilter] = useState("");
+  const [sortOrder, setSortOrder] = useState("");
+  const [minCapacity, setMinCapacity] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
 
-    fetchHalls();
+  const loadHalls = async () => {
+    try {
+      setLoading(true);
+      const res = await axios.get("http://localhost:1111/user/");
+      setHalls(res.data.data || []);
+    } catch (err) {
+      setError("To'yxonalarni yuklashda xatolik: " + (err.response?.data?.message || err.message));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadHalls();
   }, []);
 
   const openModal = (hall) => {
@@ -38,7 +45,6 @@ const Home = () => {
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedHall(null);
-    // formani tozalash
     setName("");
     setPhone("");
     setDate("");
@@ -63,25 +69,65 @@ const Home = () => {
     }
   };
 
+  const filteredAndSortedHalls = halls
+    .filter(hall =>
+      hall.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      (rayonFilter === "" || hall.rayon === rayonFilter) &&
+      (minCapacity === "" || hall.seat_count >= Number(minCapacity))
+    )
+    .sort((a, b) => {
+      if (sortOrder === "asc") return a.seat_price - b.seat_price;
+      if (sortOrder === "desc") return b.seat_price - a.seat_price;
+      return 0;
+    });
+
   return (
     <>
       <Navbar />
       <div className="container">
         <h2 className="title">Barcha To'yxonalar</h2>
 
+        <div className="filter-sort">
+          <input
+            type="text"
+            placeholder="To’yxona nomi bo‘yicha qidirish..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <select value={rayonFilter} onChange={(e) => setRayonFilter(e.target.value)}>
+            <option value="">Barcha rayonlar</option>
+            {[...new Set(halls.map(h => h.rayon))].map((rayon, i) => (
+              <option key={i} value={rayon}>{rayon}</option>
+            ))}
+          </select>
+          <select value={sortOrder} onChange={(e) => setSortOrder(e.target.value)}>
+            <option value="">Saralash</option>
+            <option value="asc">Narx: arzon → qimmat</option>
+            <option value="desc">Narx: qimmat → arzon</option>
+          </select>
+          <input
+            type="number"
+            placeholder="Min sig‘im"
+            value={minCapacity}
+            onChange={(e) => setMinCapacity(e.target.value)}
+          />
+        </div>
+
+
         {loading ? (
           <div className="loading">Yuklanmoqda...</div>
         ) : error ? (
           <div className="error">{error}</div>
-        ) : halls.length === 0 ? (
-          <p className="no-halls">Hozircha tasdiqlangan to'yxona mavjud emas</p>
+        ) : filteredAndSortedHalls.length === 0 ? (
+          <p className="no-halls">Natija topilmadi</p>
         ) : (
           <div className="hall-list">
-            {halls.map((hall) => (
+            {filteredAndSortedHalls.map((hall) => (
               <div key={hall.id} className="hall-card" onClick={() => openModal(hall)}>
                 <div className="placeholder-image">To'yxona rasmi</div>
                 <h3>{hall.name}</h3>
                 <p>Rayon: {hall.rayon}</p>
+                <p>Sig‘im: {hall.seat_count}</p>
                 <p>Narx: ${hall.seat_price}</p>
               </div>
             ))}
@@ -101,6 +147,14 @@ const Home = () => {
               <p><strong>Narx:</strong> ${selectedHall.seat_price}</p>
               <p><strong>Telefon:</strong> {selectedHall.phone}</p>
 
+              <button
+                type="button"
+                className="bron-button"
+                onClick={() => setIsCalendarOpen(true)}
+              >
+                Sanani tanlash
+              </button>
+
               <form onSubmit={handleSubmit} className="bron-form">
                 <input
                   type="text"
@@ -117,9 +171,10 @@ const Home = () => {
                   required
                 />
                 <input
-                  type="date"
+                  type="text"
+                  placeholder="Tanlangan sana"
                   value={date}
-                  onChange={(e) => setDate(e.target.value)}
+                  readOnly
                   required
                 />
                 <input
@@ -135,6 +190,14 @@ const Home = () => {
               </form>
             </div>
           </div>
+        )}
+
+        {isCalendarOpen && selectedHall && (
+          <CalendarModal
+            hall={selectedHall}
+            onClose={() => setIsCalendarOpen(false)}
+            onSelectDate={(selected) => setDate(selected)}
+          />
         )}
       </div>
     </>
