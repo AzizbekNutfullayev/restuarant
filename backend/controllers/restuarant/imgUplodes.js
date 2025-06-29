@@ -1,51 +1,38 @@
+const fs = require("fs").promises;
+const path = require("path");
 const pool = require("../../config/db");
 
-exports.uploadToyxonaImages = async (req, res) => {
+exports.uploadToyxonaImage = async (req, res) => {
   try {
-    const files = req.files;
-    if (!files || files.length === 0)
-      return res.status(400).json({ message: "Rasm yuklanmadi" });
-    if (files.length > 4)
-      return res.status(400).json({ message: "Maksimum 4 ta rasm" });
+    const file = req.file;
+    if (!file) return res.status(400).json({ message: "Rasm topilmadi" });
 
     const userRole = req.user?.role;
-    if (!userRole)
-      return res.status(401).json({ message: "Autentifikatsiya talab qilinadi" });
-
     const ownerId = req.user?.id;
-    if (!ownerId)
-      return res.status(400).json({ message: "Owner ID si talab qilinadi" });
-
     const { toyxona_id } = req.body;
-    if (!toyxona_id)
-      return res.status(400).json({ message: "Toyxona ID si talab qilinadi" });
 
-    const toyxonaQuery = `SELECT * FROM toyxonalar WHERE id = $1 AND owner_id = $2`;
-    const toyxonaResult = await pool.query(toyxonaQuery, [toyxona_id, ownerId]);
+    if (!userRole || userRole !== "owner" || !ownerId || !toyxona_id) {
+      return res.status(400).json({ message: "Noto‘g‘ri ma’lumotlar" });
+    }
+
+    const toyxonaResult = await pool.query(
+      `SELECT * FROM toyxonalar WHERE id = $1 AND owner_id = $2`,
+      [toyxona_id, ownerId]
+    );
+
     if (toyxonaResult.rowCount === 0) {
-      return res.status(403).json({ message: "Bu toyxona sizga tegishli emas yoki topilmadi" });
+      return res.status(403).json({ message: "Toyxona topilmadi yoki sizga tegishli emas" });
     }
 
-    const insertImagesQuery = `
-      INSERT INTO toyxona_images (toyxona_id, image, filename)
-      VALUES ($1, $2, $3)
-      RETURNING *;
-    `;
+    const fileBuffer = await fs.readFile(path.join(__dirname, "../../", file.path));
+    const result = await pool.query(
+      `INSERT INTO toyxona_images (toyxona_id, image, filename) VALUES ($1, $2, $3) RETURNING *`,
+      [toyxona_id, fileBuffer, file.originalname]
+    );
 
-    const insertedImages = [];
-    for (const file of files) {
-      const filePath = file.path || `/uploads/${file.filename}`;
-      const values = [toyxona_id, filePath, file.originalname];
-      const result = await pool.query(insertImagesQuery, values);
-      insertedImages.push(result.rows[0]);
-    }
-
-    res.status(201).json({
-      message: "Rasmlar muvaffaqiyatli yuklandi",
-      images: insertedImages,
-    });
-  } catch (error) {
-    console.error("Upload error:", error);
-    res.status(500).json({ message: "Ichki server xatosi", error: error.message });
+    res.status(201).json({ message: "Rasm saqlandi", image: result.rows[0] });
+  } catch (err) {
+    console.error("Upload error:", err);
+    res.status(500).json({ message: "Server xatosi", error: err.message });
   }
 };

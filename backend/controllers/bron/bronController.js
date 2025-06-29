@@ -13,13 +13,12 @@ exports.createBron = async (req, res) => {
       return res.status(400).json({ message: 'Bu sana band qilingan.' });
     }
 
-    const today = new Date().toISOString().split('T')[0];
-    const status = date < today ? 'bo\'lib o\'tgan' : 'endi bo\'ladigan';
+    const status = new Date(date) < new Date() ? 'bo\'lib o\'tgan' : 'endi bo\'ladigan';
 
     await db.query(
       `INSERT INTO bronlar (toyxona_id, name, phone, date, count_people, status)
        VALUES ($1, $2, $3, $4, $5, $6)`,
-      [toyxona_id, name, phone, date, count_people, status]
+      [toyxona_id, name, phone, date, parseInt(count_people), status]
     );
 
     res.status(201).json({ message: "Bron yaratildi" });
@@ -28,6 +27,7 @@ exports.createBron = async (req, res) => {
     res.status(500).json({ message: 'Server xatoligi' });
   }
 };
+
 
 
 exports.getAllBronlar = async (req, res) => {

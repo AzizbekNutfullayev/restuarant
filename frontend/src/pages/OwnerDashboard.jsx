@@ -6,7 +6,6 @@ import { Link, useNavigate } from "react-router-dom";
 const OwnerDashboard = () => {
   const [halls, setHalls] = useState([]);
   const [user, setUser] = useState(null);
-  const [image, setImage] = useState(null); 
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -19,26 +18,9 @@ const OwnerDashboard = () => {
         axios
           .get(`http://localhost:1111/toyxonalar/owner/${parsed.userId}`)
           .then((res) => {
-            console.log("Toyxonalar ma'lumotlari:", res.data);
             setHalls(res.data);
           })
           .catch((err) => console.error("Xatolik:", err));
-
-        axios
-          .get(`http://localhost:1111/toyxonalar/getImg/${parsed.userId}`, {
-            responseType: "arraybuffer", 
-          })
-          .then((res) => {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-              const base64Image = reader.result;
-              setImage(base64Image);
-            };
-            reader.readAsDataURL(new Blob([res.data])); 
-          })
-          .catch((err) => {
-            console.error("Rasmni olishda xatolik:", err);
-          });
       }
     }
   }, []);
@@ -92,45 +74,10 @@ const OwnerDashboard = () => {
                   maxWidth: "400px",
                 }}
               >
-                {hall.image ? (
-                  <img
-                    src={`data:image/jpeg;base64,${hall.image}`}
-                    alt={hall.name}
-                    style={{
-                      width: "100%",
-                      height: "200px",
-                      objectFit: "cover",
-                      marginBottom: "10px",
-                    }}
-                  />
-                ) : (
-                  <div
-                    style={{
-                      width: "100%",
-                      height: "200px",
-                      backgroundColor: "#eee",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      marginBottom: "10px",
-                      color: "#888",
-                      fontSize: "14px",
-                    }}
-                  >
-                    Rasm mavjud emas
-                  </div>
-                )}
-
                 <h3>{hall.name}</h3>
-                <p>
-                  <strong>Rayon:</strong> {hall.rayon}
-                </p>
-                <p>
-                  <strong>Manzil:</strong> {hall.address}
-                </p>
-                <p>
-                  <strong>Status:</strong> {hall.status}
-                </p>
+                <p><strong>Rayon:</strong> {hall.rayon}</p>
+                <p><strong>Manzil:</strong> {hall.address}</p>
+                <p><strong>Status:</strong> {hall.status}</p>
                 <Link
                   to={`/edit-hall/${hall.id}`}
                   style={{

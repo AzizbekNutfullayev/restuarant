@@ -1,41 +1,42 @@
 const express = require("express");
 const cors = require("cors");
+const path = require("path");
+
 const authRoutes = require("./routes/authRoutes");
 const toyxonaRoutes = require("./routes/toyxonaRoutes");
 const adminRoutes = require("./routes/adminRoutes");
 const usersRoutes = require("./routes/usersRoutes");
-const bronRoutes = require('./routes/bronRoutes');
+const bronRoutes = require("./routes/bronRoutes");
 
 const app = express();
 
-app.use(cors());
-app.use(express.json());
-
 app.use(cors({
-  
-  methods: ["GET", "POST", "PATCH", "DELETE"],
+  origin: "*", 
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
+app.use(express.json());
 
-const path = require('path');
 app.use('/uploads', express.static(path.join(__dirname, './uploads')));
 
-// login and register
+//  Auth: login / register
 app.use("/auth", authRoutes);
 
-// resturant 
-app.use("/toyxonalar", toyxonaRoutes); 
-//admin
-app.use('/admin',adminRoutes)
-//user
-app.use('/user',usersRoutes)
+//  Toyxona CRUD
+app.use("/toyxonalar", toyxonaRoutes);
 
+//  Admin panel route
+app.use("/admin", adminRoutes);
 
-// bron
-app.use('/api/bron', bronRoutes);
+//  Foydalanuvchilar route
+app.use("/user", usersRoutes);
 
-// bronlar
-app.listen(1111, () => {
-  console.log("Server is running on port 1111");
+//  Bron qilish route
+app.use("/api/bron", bronRoutes);
+
+//  Serverni ishga tushurish
+const PORT = process.env.PORT || 1111;
+app.listen(PORT, () => {
+  console.log(` Server is running on port ${PORT}`);
 });

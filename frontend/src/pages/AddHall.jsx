@@ -14,7 +14,8 @@ const AddHall = () => {
     seat_count: "",
     phone: ""
   });
-  const [files, setFiles] = useState([]);
+  const [file, setFile] = useState(null);
+  const [preview, setPreview] = useState(null);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
@@ -26,13 +27,16 @@ const AddHall = () => {
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
+
   const handleFileChange = (e) => {
-    const selected = Array.from(e.target.files);
-    if (selected.length > 4) {
-      alert("Faqat 4 ta rasm yuklash mumkin");
+    const selected = e.target.files[0];
+    if (!selected) return;
+    if (!selected.type.startsWith("image/")) {
+      alert("Faqat rasm faylini tanlang");
       return;
     }
-    setFiles(selected);
+    setFile(selected);
+    setPreview(URL.createObjectURL(selected));
   };
 
   const handleSubmit = async (e) => {
@@ -41,26 +45,23 @@ const AddHall = () => {
     setError("");
 
     if (!user?.userId || user.role !== "owner") {
-      setError("Faqat owner foydalanuvchi to'yxona qo‘sha oladi.");
+      setError("Faqat owner foydalanuvchi to‘yxona qo‘sha oladi.");
       return;
     }
-    if (files.length === 0) {
-      setError("Iltimos, 1 dan 4 gacha rasm tanlang.");
+
+    if (!file) {
+      setError("Iltimos, bitta rasm tanlang.");
       return;
     }
 
     try {
       const payload = { ...form, owner_id: user.userId };
       const res = await axios.post("http://localhost:1111/toyxonalar/", payload);
-      const hallId = res.data.data?.id;
+      const hallId = res.data?.data?.id;
       if (!hallId) {
-        setError("To'yxona qo‘shishda xatolik yuz berdi");
+        setError("To‘yxona yaratishda xatolik.");
         return;
       }
-
-      const formData = new FormData();
-      files.forEach(file => formData.append("images", file));
-      formData.append("toyxona_id", hallId);
 
       const token = localStorage.getItem("token");
       if (!token) {
@@ -68,14 +69,18 @@ const AddHall = () => {
         return;
       }
 
-     await axios.post("http://localhost:1111/toyxonalar/upload-images", formData, {
+      const formData = new FormData();
+      formData.append("image", file);
+      formData.append("toyxona_id", hallId);
+
+      await axios.post("http://localhost:1111/toyxonalar/upload-image", formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data"
         }
       });
 
-      setMessage("To'yxona va rasmlar muvaffaqiyatli qo‘shildi!");
+      setMessage("To‘yxona va rasm muvaffaqiyatli qo‘shildi!");
       setForm({
         name: "",
         rayon: "",
@@ -84,20 +89,20 @@ const AddHall = () => {
         seat_count: "",
         phone: ""
       });
-      setFiles([]);
+      setFile(null);
+      setPreview(null);
 
-      navigate("/owner"); 
-
+      setTimeout(() => navigate("/owner"), 1500);
     } catch (err) {
       console.error("Xatolik:", err);
-      setError("Jarayon davomida xatolik yuz berdi");
+      setError("Jarayon davomida xatolik yuz berdi.");
     }
   };
 
   if (!user || user.role !== "owner") {
     return (
       <div className="login-container">
-        <h2>Faqat owner foydalanuvchi to'yxona qo‘sha oladi</h2>
+        <h2>Faqat owner foydalanuvchi to‘yxona qo‘sha oladi.</h2>
       </div>
     );
   }
@@ -106,7 +111,7 @@ const AddHall = () => {
     <>
       <Navbar />
       <div className="login-container" style={{ maxWidth: "600px", margin: "auto" }}>
-        <h2>Yangi To'yxona Qo‘shish va Rasmlar Yuklash</h2>
+        <h2>Yangi To‘yxona Qo‘shish</h2>
         {message && <p style={{ color: "green" }}>{message}</p>}
         {error && <p style={{ color: "red" }}>{error}</p>}
 
@@ -117,17 +122,13 @@ const AddHall = () => {
           <label>Rayon</label>
           <select name="rayon" value={form.rayon} onChange={handleChange} required>
             <option value="">Tanlang</option>
-            <option value="Bektemir">Bektemir</option>
-            <option value="Chilonzor">Chilonzor</option>
-            <option value="Mirobod">Mirobod</option>
-            <option value="Mirzo Ulugbek">Mirzo Ulugbek</option>
-            <option value="Olmazor">Olmazor</option>
-            <option value="Sergeli">Sergeli</option>
-            <option value="Shayxontohur">Shayxontohur</option>
-            <option value="Uchtepa">Uchtepa</option>
-            <option value="Yakkasaroy">Yakkasaroy</option>
-            <option value="Yashnobod">Yashnobod</option>
-            <option value="Yunusobod">Yunusobod</option>
+            {[
+              "Bektemir", "Chilonzor", "Mirobod", "Mirzo Ulugbek",
+              "Olmazor", "Sergeli", "Shayxontohur", "Uchtepa",
+              "Yakkasaroy", "Yashnobod", "Yunusobod"
+            ].map((rayon) => (
+              <option key={rayon} value={rayon}>{rayon}</option>
+            ))}
           </select>
 
           <label>Manzil</label>
@@ -154,11 +155,18 @@ const AddHall = () => {
           <label>Telefon raqam</label>
           <input name="phone" value={form.phone} onChange={handleChange} required />
 
-          <label>Rasmlar yuklash (max 4 ta)</label>
-          <input type="file" multiple accept="image/*" onChange={handleFileChange} />
+          <label>Rasm yuklash (1 dona)</label>
+          <input type="file" accept="image/*" onChange={handleFileChange} />
+
+          {preview && (
+            <div style={{ marginTop: "10px" }}>
+              <p>Tanlangan rasm:</p>
+              <img src={preview} alt="Preview" style={{ maxWidth: "100%", borderRadius: "8px" }} />
+            </div>
+          )}
 
           <button type="submit" style={{ marginTop: "15px" }}>
-            Qo‘shish va Rasmlarni Yuklash
+            Qo‘shish
           </button>
         </form>
       </div>

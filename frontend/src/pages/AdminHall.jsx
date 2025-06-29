@@ -41,7 +41,7 @@ const AdminAddHall = () => {
     try {
       const res = await api.post("/admin/add-hall", payload);
       setMessage(res.data.message || "Qoshildi!");
-      navigate("/admin"); 
+      navigate("/admin");
     } catch (err) {
       setMessage(err.response?.data?.message || "Xatolik yuz berdi");
       console.error(err);
@@ -66,8 +66,20 @@ const AdminAddHall = () => {
           <label>Nomi</label>
           <input name="name" onChange={handleChange} required />
 
-          <label>Rayon</label>
-          <input name="rayon" onChange={handleChange} required />
+          <label htmlFor="rayon">Rayon</label>
+          <select name="rayon" id="rayon" onChange={handleChange} required>
+            <option value="">Rayonni tanlang</option>
+            <option value="Chilonzor">Chilonzor</option>
+            <option value="Mirzo Ulug'bek">Mirzo Ulug'bek</option>
+            <option value="Yunusobod">Yunusobod</option>
+            <option value="Yakkasaroy">Yakkasaroy</option>
+            <option value="Sergeli">Sergeli</option>
+            <option value="Uchtepa">Uchtepa</option>
+            <option value="Olmazor">Olmazor</option>
+            <option value="Shayxontohur">Shayxontohur</option>
+            <option value="Bektemir">Bektemir</option>
+          </select>
+
 
           <label>Manzil</label>
           <input name="address" onChange={handleChange} required />

@@ -22,58 +22,62 @@ const Home = () => {
   const [sortOrder, setSortOrder] = useState("");
   const [minCapacity, setMinCapacity] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
+    console.log("🔄 useEffect: Boshlandi (Halls yuklanmoqda)");
     const loadHalls = async () => {
       try {
-        console.log("To'yxonalar ma'lumotlari yuklanmoqda...");
         setLoading(true);
         const res = await axios.get("http://localhost:1111/user/img");
-        console.log("Backenddan ma'lumot keldi:", res.data);
-
+        console.log("✅ Backend javobi (halls):", res.data);
+  
         const hallsWithFullImageUrl = res.data.map(hall => ({
           ...hall,
           image: hall.image ? `http://localhost:1111/${hall.image}` : null
         }));
-
+  
         setHalls(hallsWithFullImageUrl);
-        console.log("To'yxonalar state ga o'rnatildi:", hallsWithFullImageUrl);
+        console.log("✅ State yangilandi (halls):", hallsWithFullImageUrl);
       } catch (err) {
-        console.error("To'yxonalarni yuklashda xatolik:", err);
+        console.error("❌ Halls yuklashda xatolik:", err);
         setError("To'yxonalarni yuklashda xatolik: " + (err.response?.data?.message || err.message));
       } finally {
         setLoading(false);
-        console.log("To'yxonalar yuklanish jarayoni tugadi");
+        console.log("✅ useEffect: Tugadi (Halls)");
       }
     };
     loadHalls();
   }, []);
-
+  
   useEffect(() => {
-    if (!selectedHall) return;
-
+    if (!selectedHall) {
+      console.log("📛 useEffect: selectedHall null");
+      return;
+    }
+  
+    console.log("📥 useEffect: Band sanalarni olish", selectedHall);
     const getBookedDates = async () => {
       try {
-        console.log("Band sanalar olinmoqda, tanlangan to'yxona:", selectedHall);
         const res = await axios.get(`http://localhost:1111/api/bron/hall/${selectedHall.id}`);
         const formatted = res.data.map((d) => new Date(d.date));
         setBookedDates(formatted);
-        console.log("Band sanalar (Date obyektlari):", formatted);
+        console.log("✅ Band sanalar olindi:", formatted);
       } catch (err) {
-        console.error("Band sanalarni olishda xatolik:", err);
+        console.error("❌ Band sanalarni olishda xatolik:", err);
       }
     };
     getBookedDates();
   }, [selectedHall]);
-
+  
   const openModal = (hall) => {
-    console.log("Modal ochilmoqda, tanlangan to'yxona:", hall);
+    console.log("📂 Modal ochilmoqda:", hall);
     setSelectedHall(hall);
     setIsModalOpen(true);
   };
-
+  
   const closeModal = () => {
-    console.log("Modal yopilmoqda");
+    console.log("❎ Modal yopildi");
     setIsModalOpen(false);
     setSelectedHall(null);
     setName("");
@@ -82,29 +86,57 @@ const Home = () => {
     setCountPeople("");
     setBookedDates([]);
   };
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Bron formasi yuborilmoqda...");
+    console.log("📤 Bron form yuborilmoqda...");
+  
+    if (!date) return alert("Iltimos, sanani tanlang.");
+    if (!name.trim()) return alert("Iltimos, ismingizni kiriting.");
+    if (!phone.trim() || phone.length < 7) return alert("Iltimos, to‘g‘ri telefon raqam kiriting.");
+    if (!count_people || parseInt(count_people) < 1) return alert("Odamlar soni 1 dan kam bo‘lmasligi kerak.");
+  
+    setIsSubmitting(true);
+  
     try {
       const payload = {
         toyxona_id: selectedHall.id,
-        name,
-        phone,
-        date,
-        count_people,
+        name: name.trim(),
+        phone: phone.trim(),
+        date: formatDate(date),
+        count_people: parseInt(count_people),
       };
-      console.log("Bron uchun yuborilayotgan ma'lumotlar:", payload);
-
-      await axios.post("http://localhost:1111/api/bron/create", payload);
-
-      alert("Bron qilindi!");
+      console.log("📦 Yuborilayotgan payload:", payload);
+  
+      const res = await axios.post("http://localhost:1111/api/bron/create", payload);
+      console.log("✅ Bron yaratildi:", res.data);
+  
+      alert(res.data?.message || "Bron muvaffaqiyatli amalga oshirildi!");
       closeModal();
     } catch (err) {
-      console.error("Bron qilishda xatolik:", err);
-      alert("Bron qilishda xatolik: " + (err.response?.data?.message || err.message));
+      const msg = err.response?.data?.message || err.message;
+      console.error("❌ Bron yaratishda xatolik:", msg);
+  
+      if (msg.includes("band")) {
+        alert("Ushbu sana band qilingan. Iltimos, boshqa sanani tanlang.");
+      } else {
+        alert("Xatolik: " + msg);
+      }
+    } finally {
+      setIsSubmitting(false);
+      console.log("✅ Form yuborish yakunlandi");
     }
   };
+  
+  const formatDate = (dateObj) => {
+    const year = dateObj.getFullYear();
+    const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+    const day = String(dateObj.getDate()).padStart(2, '0');
+    const formatted = `${year}-${month}-${day}`;
+    console.log("🗓 Sanani formatlash:", formatted);
+    return formatted;
+  };
+    
 
   const filteredAndSortedHalls = halls
     .filter(
@@ -214,19 +246,17 @@ const Home = () => {
               <p><strong>Telefonn:</strong> {selectedHall.phone}</p>
 
               <form onSubmit={handleSubmit} className="bron-form">
-                <inputnn
+                <input
                   type="text"
                   placeholder="Ismingiz"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  required
                 />
                 <input
                   type="tel"
                   placeholder="Telefon raqamingiz"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  required
                 />
                 <DatePicker
                   selected={date}
@@ -236,17 +266,18 @@ const Home = () => {
                   placeholderText="Sanani tanlang"
                   dateFormat="yyyy-MM-dd"
                   className="custom-datepicker"
-                  required
                 />
                 <input
                   type="number"
                   placeholder="Odamlar soni"
                   value={count_people}
                   onChange={(e) => setCountPeople(e.target.value)}
-                  required
                 />
-                <button type="submit" className="bron-button">Bron qilish</button>
+                <button type="submit" className="bron-button" disabled={isSubmitting}>
+                  {isSubmitting ? "Yuborilmoqda..." : "Bron qilish"}
+                </button>
               </form>
+
             </div>
           </div>
         )}
